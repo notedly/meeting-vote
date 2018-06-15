@@ -1,0 +1,162 @@
+import gulp from 'gulp' ; 
+import webpack from 'gulp-webpack' ; 
+import fs from 'fs' ; 
+
+import chkEvtFunc from './chkEvtFunc' ; 
+import getFiles from './getFiles' ; 
+import { PATH } from '../Dir' ; 
+
+let SRC = PATH.SRC , 
+	DEST = PATH.DEST , 
+	depth0JSFiles = [] ; 
+
+let chkDepth0Files = ( findPaths ) => {
+	return new Promise( resolve => {
+		// console.log( 'findPaths : ' , findPaths ) ; 
+		// console.log( 'depth0JSFiles : ' , depth0JSFiles ) ; 
+
+		findPaths.map(( findFileName , idx ) => {
+			// console.log( 'findFileName : ' , findFileName ) ; 
+			depth0JSFiles.map(( depth0FileName , jdx ) => {
+				// console.log( 'depth0FileName : ' , depth0FileName ) ; 
+				fs.readFile( `html/js/${depth0FileName}` , 'utf8' , ( err , fileData ) => {
+					console.log( '------------------------------------\n' , fileData , '\n------------------------------------' ) ; 
+					console.log( 'findFileName : ' , findFileName ) ; 
+					let re = new RegExp( '^import.*?\/' + findFileName.replace( '.js' , '' ) , 'gm' ) ; 
+					let result = re.exec( fileData ) ; 
+					// console.log( '-- result : ' , result ) ; 
+
+					if ( result != null ) {
+						resolve( depth0FileName ) ; 
+					} else {
+						resolve( null ) ; 
+					}
+
+				}) ; 
+			}) ; 
+		}) ; 
+	}) ; 
+} ;  
+
+let dirchkJS = () => {	
+	console.log( 'in dirchkJS' ) ; 
+	let promises = [] ; 
+	return new Promise( ( resolve , reject ) => {
+		promises.push( getFiles( 'html/js/' ) ) ; 
+
+		Promise.all( promises ).then( result => {
+			console.log( 'result : ' , result ) ; 
+			depth0JSFiles = result ; 
+			resolve() ; 
+		}) ; 
+	}) ; 
+} ; 
+
+function webpackCompile ( jsName ) {
+	webpack({
+		entry : {
+			entryName : `${__dirname}/../html/js/${jsName}.js`
+		} , 
+		output : {
+			filename : `${jsName}.js`
+		} , 
+		module : {
+			loaders : [
+				{
+					test : /\.js$/ , 
+					loader : 'babel-loader' , 
+					exclude : '/node_modules/' , 
+					query : {
+						cacheDirectory : true , 
+						"presets" : ['es2015', 'es2017', 'stage-3', 'react'],
+						"plugins" : [
+							'transform-decorators-legacy', 
+							'transform-class-properties' ,
+							'transform-async-to-generator' , 
+							'transform-object-assign' , 
+							'transform-regenerator' , 
+							["transform-runtime", {
+								"helpers": false, // defaults to true 
+								"polyfill": false, // defaults to true 
+								"regenerator": true, // defaults to true 
+								"moduleName": "babel-runtime" // defaults to "babel-runtime" 
+							}]
+						],
+					}
+				}
+			]   
+		} 
+	}).pipe( gulp.dest( DEST.JS ) ) ; 
+}
+
+let watch_js = () => {
+	return new Promise( ( resolve , reject ) => {
+		gulp.watch( SRC.JS ).on( 'all' , ( evt , path , stats ) => {
+			let chkInfo = chkEvtFunc( evt , path ) ; 
+			if ( !chkInfo.bln ) return ; // 현재 감지된 파일이 존재하지 않으면( bln == false ) 작업을 멈춥니다.
+
+			let evtPath = chkInfo.path
+			let originalPath = chkInfo.path ; 
+			let pathArr = originalPath.split( '/' ) ; 
+			let fileName = pathArr.pop().replace( /\.js$/ , '' ) ; 
+
+			pathArr.shift() ; 
+			let crntDatas = [
+				{
+					originalPath : originalPath , 
+					fileName : fileName , 
+					pathArr : pathArr , 
+				} , 
+			] ; 
+			let pathStr = '' ; 
+
+			if ( crntDatas[0].pathArr.length == 1 ) {
+				/*길이가 1개라면 최상위폴더로 간주합니다.*/
+				pathStr = `/${crntDatas[0].pathArr.join( '/' )}/` ; 
+				// console.log( `${__dirname}${pathStr}${crntDatas[0].fileName}.js` ) ; 
+				console.log( 'pathStr : ' , pathStr ) ; 
+				webpackCompile( crntDatas[0].fileName ) ; 
+			} else {
+				/*길이가 2개 이상이라면 하위폴더로 간주합니다.*/
+
+				// chkParentFile( crntDatas ) ; 
+				// return ; 
+
+				pathStr = `html/${crntDatas[0].pathArr[0]}/${crntDatas[0].pathArr[1]}/` ; 
+				// console.log( 'pathStr : ', pathStr ) ; 
+				let promises = [] ; 
+
+				console.log( 'getFiles : ' , getFiles ) ; 
+
+				promises.push( getFiles( pathStr ) ) ; 
+				Promise.all( promises ).then( result => {
+					let findPaths = result ; 
+					// console.log( 'findPaths : ' , findPaths ) ; 
+					// console.log( 'depth0JSFiles : ' , depth0JSFiles ) ; 
+
+					let promises2 = [] ; 
+					promises2.push( chkDepth0Files( findPaths ) ) ; 
+
+					Promise.all( promises2 ).then( result => {
+						// console.log( 'chk result : ' , result ) ; 
+						result.map( crntFileName => {
+							console.log( 'crntFileName : ' , crntFileName ) ; 
+							if ( crntFileName == null ) {
+								console.log( 'import된 상위 js파일이 존재하지 않습니다. import 하고싶은 파일을 설정하여주십시오.' ) ; 
+							} else {
+								webpackCompile( crntFileName.replace( '.js' , '' ) ) ; 
+							}
+						}) ; 
+					}) ; 
+					
+				}) ; 
+			}
+		}) ; 
+
+		resolve () ; 
+	}) ;  
+} ;
+
+dirchkJS() ; 
+
+export default watch_js ; 
