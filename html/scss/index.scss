@@ -1,3 +1,52 @@
-@charset 'UTF-8' ; 
-@import './ui/layout'; 
-@import './ui/common'; 
+@charset 'UTF-8' ;
+@import './ui/layout';
+@import './ui/common';
+
+.wrapBox{
+	padding:50px;
+	.title{
+		margin-bottom:5px;
+		h1{
+			font-size:15px;
+		}
+	}
+	.form{
+		ul{
+			> li{
+				margin-bottom:3px;
+			}
+		}
+		label{
+			line-height: 22px;
+			vertical-align: top;
+		}
+	}
+	.btn_area{
+		text-align:center;
+		.btn{
+			margin:0 3px;
+		}
+	}
+	input[type=text], textarea{
+		display: inline-block;
+		padding:0 2px;
+		line-height:22px;
+		border:1px solid #bbb;
+	}
+}
+
+.intro{
+	text-align: center;
+	padding:100px;
+	h1{
+		margin-bottom: 20px;
+	}
+}
+.btn{
+	display: inline-block;
+	padding:10px 20px;
+	border-radius:5px;
+	background-color:#333;
+	color:#fff;
+	font-size:14px;
+}
