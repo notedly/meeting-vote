@@ -9,7 +9,7 @@ class RegistStep01 extends Component {
 	constructor( props ) {
 		super( props ) ;
 
-		let loadDate = JSON.parse( localStorage.getItem('meetInfo') ) ;
+		let loadDate = JSON.parse( localStorage.getItem('meetSummary') ) ;
 		this.state = loadDate || { name : '' , title : '' , loc : '' , memo : ''} ;
 
 	}
@@ -52,11 +52,11 @@ class RegistStep01 extends Component {
 			alert( '제목을 적어주세요.' ) ;
 		}else{
 
-			let meetInfo = { name, title, loc, memo } ;
+			let meetSummary = { name, title, loc, memo } ;
 
 			let saveData = new Promise((resolve, reject) => {
 				// 입력한 정보 로컬스토리지에 저장
-				localStorage.setItem( 'meetInfo' , JSON.stringify( meetInfo ) ) ;
+				localStorage.setItem( 'meetSummary' , JSON.stringify( meetSummary ) ) ;
 				resolve('Success!') ;
 			});
 
