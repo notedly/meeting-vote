@@ -72,22 +72,22 @@ class RegistStep01 extends Component {
 	render () {
 		return (
 			<div className="wrap_register">
-				<div className="title"><h1>무슨 모임이야?</h1></div>
+				<div className="title"><h1>STEP 01. 무슨 모임이야?</h1></div>
 				<div className="form">
 
 					<div className="ct">
 						<ul>
 							<li>
-								<label>name : <input type="text" onChange={this.handleInputChange.bind(this, 'name')} /></label>
+								<label>주최자 : <input type="text" onChange={this.handleInputChange.bind(this, 'name')} value={this.state.name} /></label>
 							</li>
 							<li>
-								<label>Title : <input type="text" onChange={this.handleInputChange.bind(this, 'title')} /></label>
+								<label>모임명 : <input type="text" onChange={this.handleInputChange.bind(this, 'title')} value={this.state.title} /></label>
 							</li>
 							<li>
-								<label>Location : <input type="text" onChange={this.handleInputChange.bind(this, 'location')} /></label>
+								<label>위치 : <input type="text" onChange={this.handleInputChange.bind(this, 'location')} value={this.state.loc} /></label>
 							</li>
 							<li>
-								<label>Memo : <textarea onChange={this.handleInputChange.bind(this, 'memo')}></textarea></label>
+								<label>메모 : <textarea onChange={this.handleInputChange.bind(this, 'memo')} value={this.state.memo}></textarea></label>
 							</li>
 						</ul>
 					</div>

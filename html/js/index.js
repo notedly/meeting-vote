@@ -10,7 +10,7 @@ class IndexContainer extends Component {
 	render () {
 		return (
 			<div className="intro">
-				<h1>Hello, React World.</h1>
+				<h1>Hello, meeting.</h1>
 				<a href="/register?step=01" className="btn">Meet</a>
 			</div>
 		) ;

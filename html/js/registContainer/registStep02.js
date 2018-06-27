@@ -11,29 +11,38 @@ class RegistStep02 extends Component {
 	constructor( props ) {
 		super( props ) ;
 
-		let loadMeetDays = JSON.parse( localStorage.getItem('meetDays') ) ;
+		console.log( localStorage.getItem('meetEmail') ) ;
+
+		let loadMeetDays = JSON.parse( localStorage.getItem('meetDays') )
+		,   meetEmail = JSON.parse( localStorage.getItem('meetEmail') )
+		,   meetInfo = JSON.parse( localStorage.getItem('meetInfo') )  ;
+
 
 		this.state = {
 			selectedDays: [],
 			selectedDaysConvert : loadMeetDays || [],
-			meetInfo : JSON.parse( localStorage.getItem('meetInfo') ) ,
-			calendarOpen : false
+			meetInfo : meetInfo,
+			calendarOpen : false ,
+			meetEmailValue : '' ,
+			meetEmailOriginValue : '' ,
+			meetEmailModifyValue : '' ,
+			meetEmail : meetEmail || [] ,
+			modifyOpen : false
 		}
 
 		this.handleDayClick = this.handleDayClick.bind(this);
 		this.confirmClickHandler = this.confirmClickHandler.bind(this);
 
-		console.log( this.state.meetInfo ) ;
 	}
 
-	/* 1. 달력 열기
+	/* 달력 기능 1. 달력 열기
 	- 날짜 선택 버튼을 클릭했을때 발생한다. */
 
 	openCalendar(){
 		this.setState({ calendarOpen : !this.state.calendarOpen }) ;
 	}
 
-	/* 2. 날짜 선택
+	/* 달력 기능 2. 날짜 선택
 	- 달력에서 날짜를 클릭했을 때 발생한다. */
 
 	handleDayClick(day, { selected }) {
@@ -50,7 +59,7 @@ class RegistStep02 extends Component {
 		this.setState({ selectedDays });
 	}
 
-	/* 3. 날짜 선택 완료
+	/* 달력 기능 3. 날짜 선택 완료
 	- 달력 OK 버튼 클릭했을 때 발생한다.
 	- 날짜 타입을 변형해서 새로 저장한다. */
 
@@ -75,7 +84,7 @@ class RegistStep02 extends Component {
 
 	}
 
-	/* 4. 선택한 날짜 노출 */
+	/* 달력 기능 4. 선택한 날짜 노출 */
 
 	selectListMakeHandler( days, idx ){
 		return(
@@ -84,10 +93,153 @@ class RegistStep02 extends Component {
 	}
 
 
+	/*
+		참여자 추가  필요 기능
+		- 추가 버튼
+		- 삭제 버튼
+		- 수정 버튼
+		- 추가 시 중복 체크
+		- 추가 시 이메일 형식 체크
+	*/
+
+	emailInputChange( event )  {
+		this.setState({ meetEmailValue : event.target.value }) ;
+	}
+
+	emailInputModifyChange( event )  {
+		this.setState({ meetEmailModifyValue : event.target.value }) ;
+	}
+
+	/* 참여자 기능 1. 추가한 참여자 저장 */
+	addMeetEmail( event ){
+
+		let arrMeetEmail = this.state.meetEmail
+		, 	 meetEmailValue = this.state.meetEmailValue ;
+
+		if( !this.emailTypeCheck( meetEmailValue ) ){	// 이메일 형식 검사
+			alert('이메일 형식에 맞지 않습니다') ;
+		}else if( this.emailOverlapCheck( meetEmailValue )) {	// 이메일 중복 검사
+			alert('중복된 이메일이 있습니다.') ;
+		}else {
+
+			arrMeetEmail.push( meetEmailValue ) ;
+			this.setState({
+				meetEmail : arrMeetEmail
+			}) ;
+
+			localStorage.setItem( 'meetEmail' , JSON.stringify( arrMeetEmail ) ) ;
+
+			this.addEmail.value = '';
+		}
+
+	}
+
+	/* 참여자 기능 2. 추가한 참여자 마크업 생성 */
+	meetParticipantListMakeHandler( email, idx ){
+		return(
+			<li key={idx} data-value={email}>
+				<span>{email}</span>
+				<button type="button" className="btn btn_sm" onClick={this.removeParticipant.bind(this)}>삭제</button>
+				<button type="button" className="btn btn_sm" onClick={this.modifyParticipant.bind(this)}>수정</button>
+			</li>
+		)
+	}
+
+	/* 참여자 기능 3. 삭제 버튼 클릭 */
+	removeParticipant( event ){
+
+		let removeEmail = event.target.closest('li').getAttribute('data-value')
+		,	 arrMeetEmail = this.state.meetEmail ;
+
+		arrParticipant.splice( arrParticipant.indexOf( removeEmail ), 1 ) ;
+
+		this.setState({
+			meetEmail : arrParticipant
+		}) ;
+
+		localStorage.setItem( 'meetEmail' , JSON.stringify( arrParticipant ) ) ;
+
+	}
+
+	/* 참여자 기능 4. 수정 버튼 클릭 */
+	modifyParticipant( event ){
+
+		console.log('수정 시작') ;
+
+		if( this.state.modifyOpen ) return;
+
+		let modifyEmail = event.target.closest('li').getAttribute('data-value')
+		,	 arrParticipant = this.state.meetEmail ;
+		this.addEmailModify.value = modifyEmail ;
+
+		this.setState({
+			modifyOpen : !this.state.modifyOpen ,
+			meetEmailOriginValue : modifyEmail ,
+			meetEmailModifyValue : modifyEmail
+		}) ;
+
+	}
+
+	/* 참여자 기능 5. 수정 취소 버튼 클릭 */
+	modifyCancelParticipant( event ){
+
+		console.log('수정 취소') ;
+
+		this.setState({
+			modifyOpen : !this.state.modifyOpen ,
+			meetEmailOriginValue : ''
+		}) ;
+	}
+
+	/* 참여자 기능 6. 완료 버튼 클릭 */
+	modifyCompleteParticipant( event ){
+
+		if( !this.emailTypeCheck( this.state.meetEmailModifyValue ) ){	// 이메일 형식 검사
+			alert('이메일 형식에 맞지 않습니다') ;
+		}else if( this.emailOverlapCheck( this.state.meetEmailModifyValue )) {	// 이메일 중복 검사
+			alert('중복된 이메일이 있습니다.') ;
+		}else {
+
+			let meetEmailArray = this.state.meetEmail ;
+			let newMeetEmailArray = meetEmailArray.map(( item ) => item == this.state.meetEmailOriginValue ? this.state.meetEmailModifyValue : item ) ;
+
+			this.setState({
+				meetEmail : newMeetEmailArray ,
+				modifyOpen : !this.state.modifyOpen ,
+				meetEmailOriginValue : ''
+			}) ;
+
+			localStorage.setItem( 'meetEmail' , JSON.stringify( newMeetEmailArray ) ) ;
+		}
+	}
+
+	// 이메일 형식 검사
+	emailTypeCheck( strValue ){
+
+		var regExp = /[0-9a-zA-Z][_0-9a-zA-Z-]*@[_0-9a-zA-Z-]+(\.[_0-9a-zA-Z-]+){1,2}$/;
+		//입력을 안했으면
+		if(strValue.lenght == 0){
+			return false;
+		}else if (!strValue.match(regExp)){
+			//이메일 형식에 맞지않으면
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	// 이메일 중복 검사
+	emailOverlapCheck( strValue ){
+		let arrMeetEmail = this.state.meetEmail
+		,	 chkEmail = strValue ;
+		return arrMeetEmail.some( item => item == chkEmail) ;
+	}
+
+
 	render(){
 		return(
 			<div className="wrap_register">
-				<div className="title"><h1>언제?누구와?</h1></div>
+				<div className="title"><h1>STEP 02. 언제?누구와?</h1></div>
 				<div className="form">
 
 					<div className="ct">
@@ -105,14 +257,27 @@ class RegistStep02 extends Component {
 							</li>
 							<li>
 								<label>참여자 : </label>
-								<ul>
-									<li>
-										<input type="text" />
-										<span className="btn_area">
-											<button type="button">추가</button>
-										</span>
-									</li>
+								<ul className="lst_person">
+									{this.state.meetEmail.map( this.meetParticipantListMakeHandler , this )}
 								</ul>
+								<div>
+
+									<div className={this.state.modifyOpen ? "ip_add_modify open" : "ip_add_modify" }>
+										<input type="email" ref={ref => { this.addEmailModify = ref }} onChange={this.emailInputModifyChange.bind(this)} value={this.state.meetEmailModifyValue} />
+										<span className="btn_area">
+											<button type="button" className="btn btn_sm" onClick={this.modifyCompleteParticipant.bind(this)}>완료</button>
+											<button type="button" className="btn btn_sm" onClick={this.modifyCancelParticipant.bind(this)}>취소</button>
+										</span>
+									</div>
+
+									<div className={this.state.modifyOpen ? "ip_add close" : "ip_add" }>
+										<input type="email" ref={ref => { this.addEmail = ref }} onChange={this.emailInputChange.bind(this)} />
+										<span className="btn_area">
+											<button type="button" className="btn btn_sm" onClick={this.addMeetEmail.bind(this)}>추가</button>
+										</span>
+									</div>
+
+								</div>
 							</li>
 						</ul>
 					</div>

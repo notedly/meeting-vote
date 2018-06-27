@@ -31,6 +31,18 @@ class RegisterContainer extends Component {
 		return "";
 	}
 
+
+	/*
+
+		아래 스위치문을 위에서 처리해서 값 하나만 넘긴다?
+		render(){
+			return(
+				valiable
+			)
+		}
+
+	*/
+
 	render () {
 
 		switch( this.state.pageStep ){
