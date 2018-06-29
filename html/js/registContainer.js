@@ -9,8 +9,32 @@ class RegisterContainer extends Component {
 	constructor( props ){
 		super( props ) ;
 
+
+		let infoSummary = JSON.parse( localStorage.getItem('meetSummary') )
+		,	 infoDays = JSON.parse( localStorage.getItem('meetDays') )
+		,	 infoEmail = JSON.parse( localStorage.getItem('meetEmail') ) ;
+
 		this.state = {
-			pageStep : this.getParameter('step')
+			pageStep : this.getParameter('step') ,
+			name : null ,
+			title : null ,
+			loc : null ,
+			memo : null
+		}
+
+		if( infoSummary ) {
+			this.state.name = infoSummary.name ;
+			this.state.title = infoSummary.title ;
+			this.state.loc = infoSummary.loc ;
+			this.state.memo = infoSummary.memo ;
+		}
+
+		if( infoDays ) {
+			this.state.meetDays = infoDays ;
+		}
+
+		if( infoEmail ) {
+			this.state.meetEmail = infoEmail ;
 		}
 
 	}
@@ -31,7 +55,6 @@ class RegisterContainer extends Component {
 		return "";
 	}
 
-
 	/*
 
 		아래 스위치문을 위에서 처리해서 값 하나만 넘긴다?
@@ -43,14 +66,58 @@ class RegisterContainer extends Component {
 
 	*/
 
+	update = ( data ) => {
+		localStorage.setItem( 'meetSummary' , JSON.stringify( data ) ) ;
+		return true ;
+	}
+
+	validationChk = ( data ) => {
+
+		let { name , title, loc, memo } = data;
+
+		if ( name == '' || name == undefined ) {
+			alert( '이름을 적어주세요.' ) ;
+			return false;
+		}
+		if ( title == '' || title == undefined ) {
+			alert( '제목을 적어주세요.' ) ;
+			return false;
+		}
+
+		return this.update( data );
+
+	}
+
+	goToNextStep = ( data ) => {
+
+		let chk = this.validationChk( data ) ;
+		if( chk ) {
+			location.href = '/register?step=02' ;
+		}
+
+	}
+
 	render () {
+
+		let regSummaryProps = {
+			name : this.state.name ,
+			title : this.state.title ,
+			loc : this.state.loc ,
+			memo : this.state.memo ,
+			goToNextStep : this.goToNextStep
+		}
+
+		let regDetailProps = {
+			meetDays : this.state.meetDays ,
+			meetEmail : this.state.meetEmail
+		}
 
 		switch( this.state.pageStep ){
 			case '01' :
-				return ( <RegistStep01 /> ) ;
+				return ( <RegistStep01 {...regSummaryProps} /> ) ;
 			break ;
 			case '02' :
-				return ( <RegistStep02 /> ) ;
+				return ( <RegistStep02 {...regDetailProps} /> ) ;
 			break ;
 		}
 

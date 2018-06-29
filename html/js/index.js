@@ -4,8 +4,6 @@ import index_sub1 from './index/index_sub1' ;
 import common from './include/common' ;
 import PromiseSetter from '../lib/common' ;
 
-console.log( index_sub1 );
-
 class IndexContainer extends Component {
 	render () {
 		return (

@@ -14,14 +14,12 @@ class RegistStep02 extends Component {
 		console.log( localStorage.getItem('meetEmail') ) ;
 
 		let loadMeetDays = JSON.parse( localStorage.getItem('meetDays') )
-		,   meetEmail = JSON.parse( localStorage.getItem('meetEmail') )
-		,   meetInfo = JSON.parse( localStorage.getItem('meetInfo') )  ;
+		,   meetEmail = JSON.parse( localStorage.getItem('meetEmail') );
 
 
 		this.state = {
 			selectedDays: [],
 			selectedDaysConvert : loadMeetDays || [],
-			meetInfo : meetInfo,
 			calendarOpen : false ,
 			meetEmailValue : '' ,
 			meetEmailOriginValue : '' ,
