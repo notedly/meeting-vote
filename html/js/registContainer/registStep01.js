@@ -1,5 +1,6 @@
 import React , { Component } from 'react' ;
 import ReactDOM , { render } from 'react-dom' ;
+import { TopTitle } from '../include/title' ;
 
 /*
 	STEP 01
@@ -15,6 +16,15 @@ class RegistStep01 extends Component {
 			loc : this.props.loc || '' ,
 			memo : this.props.memo || '' ,
 		}
+
+		/**
+		[ props ]
+		[ state ]
+		@name : 모임 주최자 정보
+		@title : 모임명
+		@loc : 모임 위치
+		@memo : 추가 내용
+		*/
 
 	}
 
@@ -49,25 +59,51 @@ class RegistStep01 extends Component {
 	}
 
 	render () {
+
+		let nameProps = {
+			type : 'text' ,
+			placeholder : '주최자를 작성하여주십시오.' ,
+			value : this.state.name ,
+			onChange : this.nameInputHandler ,
+			ref : input => this.nameInput = input
+		}
+
+		let titleProps = {
+			type : 'text' ,
+			placeholder : '모임명을 작성하여주십시오.' ,
+			value : this.state.title ,
+			onChange : this.titleInputHandler ,
+			ref : input => this.titleInput = input
+		}
+
+		let locProps = {
+			type : 'text' ,
+			placeholder : '위치를 작성하여주십시오.' ,
+			value : this.state.loc ,
+			onChange : this.locInputHandler ,
+			ref : input => this.locInput = input
+		}
+
+		let memoProps = {
+			onChange : this.memoInputHandler ,
+			value : this.state.memo
+		}
+
+		let topTitleProps = {
+			text : 'STEP 01. 무슨 모임이야?'
+		}
+
 		return (
 			<div className="wrap_register">
-				<div className="title"><h1>STEP 01. 무슨 모임이야?</h1></div>
+				<TopTitle {...topTitleProps} />
 				<div className="form">
 
 					<div className="ct">
 						<ul>
-							<li>
-								<label>주최자 : <input type="text" onChange={this.nameInputHandler} value={this.state.name} /></label>
-							</li>
-							<li>
-								<label>모임명 : <input type="text" onChange={this.titleInputHandler} value={this.state.title} /></label>
-							</li>
-							<li>
-								<label>위치 : <input type="text" onChange={this.locInputHandler} value={this.state.loc} /></label>
-							</li>
-							<li>
-								<label>메모 : <textarea onChange={this.memoInputHandler} value={this.state.memo}></textarea></label>
-							</li>
+							<li><label>주최자 : <input {...nameProps} /></label></li>
+							<li><label>모임명 : <input {...titleProps} /></label></li>
+							<li><label>위치 : <input {...locProps} /></label></li>
+							<li><label>메모 : <textarea {...memoProps}></textarea></label></li>
 						</ul>
 					</div>
 

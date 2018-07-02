@@ -2,6 +2,7 @@ import React , { Component } from 'react' ;
 import ReactDOM , { render } from 'react-dom' ;
 import DayPicker, { DateUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { TopTitle } from '../include/title' ;
 
 /*
 	STEP 02
@@ -11,22 +12,30 @@ class RegistStep02 extends Component {
 	constructor( props ) {
 		super( props ) ;
 
-		console.log( localStorage.getItem('meetEmail') ) ;
-
-		let loadMeetDays = JSON.parse( localStorage.getItem('meetDays') )
-		,   meetEmail = JSON.parse( localStorage.getItem('meetEmail') );
-
-
 		this.state = {
+			meetEmail : this.props.meetEmail || [] ,
+			selectedDaysConvert : this.props.meetDays || [],
 			selectedDays: [],
-			selectedDaysConvert : loadMeetDays || [],
 			calendarOpen : false ,
 			meetEmailValue : '' ,
 			meetEmailOriginValue : '' ,
 			meetEmailModifyValue : '' ,
-			meetEmail : meetEmail || [] ,
 			modifyOpen : false
 		}
+
+		/**
+		[ props ]
+		@meetEmail : 참여자 이메일 배열 리스트
+		@selectedDaysConvert : 모임 날짜 배열 리스트 ( 변환 정보 )
+
+		[ state ]
+		@selectDays : 달력에서 선택한 날짜가 들어가는 배열리스트
+		@calendarOpen : 달력 펼침/닫힘 유무
+		@meetEmailValue : 이메일의 내용
+		@meetEmailOriginValue :
+		@meetEmailModifyValue :
+		@modifyOpen : 수정 입력창 펼침/닫힘 유무
+		*/
 
 		this.handleDayClick = this.handleDayClick.bind(this);
 		this.confirmClickHandler = this.confirmClickHandler.bind(this);
@@ -235,9 +244,16 @@ class RegistStep02 extends Component {
 
 
 	render(){
+
+		let topTitleProps = {
+			text : 'STEP 02. 언제?누구와?'
+		}
+
 		return(
 			<div className="wrap_register">
-				<div className="title"><h1>STEP 02. 언제?누구와?</h1></div>
+
+				<TopTitle {...topTitleProps} />
+
 				<div className="form">
 
 					<div className="ct">
@@ -261,7 +277,12 @@ class RegistStep02 extends Component {
 								<div>
 
 									<div className={this.state.modifyOpen ? "ip_add_modify open" : "ip_add_modify" }>
-										<input type="email" ref={ref => { this.addEmailModify = ref }} onChange={this.emailInputModifyChange.bind(this)} value={this.state.meetEmailModifyValue} />
+										<input
+											type="email"
+											ref={ref => this.addEmailModify = ref}
+											onChange={this.emailInputModifyChange.bind(this)}
+											value={this.state.meetEmailModifyValue}
+										/>
 										<span className="btn_area">
 											<button type="button" className="btn btn_sm" onClick={this.modifyCompleteParticipant.bind(this)}>완료</button>
 											<button type="button" className="btn btn_sm" onClick={this.modifyCancelParticipant.bind(this)}>취소</button>
@@ -269,7 +290,11 @@ class RegistStep02 extends Component {
 									</div>
 
 									<div className={this.state.modifyOpen ? "ip_add close" : "ip_add" }>
-										<input type="email" ref={ref => { this.addEmail = ref }} onChange={this.emailInputChange.bind(this)} />
+										<input
+											type="email"
+											ref={ref => { this.addEmail = ref }}
+											onChange={this.emailInputChange.bind(this)}
+										/>
 										<span className="btn_area">
 											<button type="button" className="btn btn_sm" onClick={this.addMeetEmail.bind(this)}>추가</button>
 										</span>

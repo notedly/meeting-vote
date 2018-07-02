@@ -77,3 +77,43 @@
 		display: block;
 	}
 }
+
+.preview{
+	.top{
+		text-align: center;
+		h2{
+			font-size:20px;
+			font-weight: bold;
+		}
+	}
+	.contents{
+		dt{
+			margin-bottom: 5px;
+			font-weight: bold;
+			border-bottom:1px dotted #333;
+			line-height: 1.6;
+		}
+		dd{
+			margin-bottom:15px;
+		}
+	}
+}
+
+.lst_preview{
+	> li{
+		position: relative;
+		padding-left:7px;
+		line-height: 1.8em;
+		&:before{
+			content:"";
+			display: block;
+			position:absolute;
+			left:0;
+			top:50%;
+			width:2px;
+			height:2px;
+			background-color: #666;
+			transform:translateY(-50%) ;
+		}
+	}
+}

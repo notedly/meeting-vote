@@ -2,6 +2,7 @@ import React , { Component } from 'react' ;
 import ReactDOM , { render } from 'react-dom' ;
 import { RegistStep01 } from './registContainer/registStep01' ;
 import { RegistStep02 } from './registContainer/registStep02' ;
+import { RegistStep03 } from './registContainer/registStep03' ;
 import common from './include/common' ;
 import PromiseSetter from '../lib/common' ;
 
@@ -12,6 +13,7 @@ class RegisterContainer extends Component {
 
 		let infoSummary = JSON.parse( localStorage.getItem('meetSummary') )
 		,	 infoDays = JSON.parse( localStorage.getItem('meetDays') )
+		, 	 infoDaysOrigin = JSON.parse( localStorage.getItem('meetDaysOrigin') )
 		,	 infoEmail = JSON.parse( localStorage.getItem('meetEmail') ) ;
 
 		this.state = {
@@ -19,7 +21,10 @@ class RegisterContainer extends Component {
 			name : null ,
 			title : null ,
 			loc : null ,
-			memo : null
+			memo : null ,
+			meetDays : null ,
+			meetDaysOrigin : null ,
+			meetEmail : null
 		}
 
 		if( infoSummary ) {
@@ -31,11 +36,14 @@ class RegisterContainer extends Component {
 
 		if( infoDays ) {
 			this.state.meetDays = infoDays ;
+			this.state.meetDaysOrigin = infoDaysOrigin ;
 		}
 
 		if( infoEmail ) {
 			this.state.meetEmail = infoEmail ;
 		}
+
+		console.log( 'infoDaysOrigin : ', infoDaysOrigin ) ;
 
 	}
 
@@ -76,11 +84,13 @@ class RegisterContainer extends Component {
 		let { name , title, loc, memo } = data;
 
 		if ( name == '' || name == undefined ) {
-			alert( '이름을 적어주세요.' ) ;
+			alert( '주최자를 적어주세요.' ) ;
+			this.registerContents.nameInput.focus() ;
 			return false;
 		}
 		if ( title == '' || title == undefined ) {
-			alert( '제목을 적어주세요.' ) ;
+			alert( '모임명을 적어주세요.' ) ;
+			this.registerContents.titleInput.focus() ;
 			return false;
 		}
 
@@ -104,12 +114,23 @@ class RegisterContainer extends Component {
 			title : this.state.title ,
 			loc : this.state.loc ,
 			memo : this.state.memo ,
-			goToNextStep : this.goToNextStep
+			goToNextStep : this.goToNextStep ,
+			ref : registerContents => this.registerContents = registerContents
 		}
 
 		let regDetailProps = {
 			meetDays : this.state.meetDays ,
-			meetEmail : this.state.meetEmail
+			meetDaysOrigin : this.state.meetDaysOrigin ,
+			meetEmail : this.state.meetEmail ,
+		}
+
+		let regPreviewProps = {
+			name : this.state.name ,
+			title : this.state.title ,
+			loc : this.state.loc ,
+			memo : this.state.memo ,
+			meetDays : this.state.meetDays ,
+			meetEmail : this.state.meetEmail ,
 		}
 
 		switch( this.state.pageStep ){
@@ -118,6 +139,9 @@ class RegisterContainer extends Component {
 			break ;
 			case '02' :
 				return ( <RegistStep02 {...regDetailProps} /> ) ;
+			break ;
+			case '03' :
+				return ( <RegistStep03 {...regPreviewProps} /> ) ;
 			break ;
 		}
 
