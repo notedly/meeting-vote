@@ -6,7 +6,7 @@ import { TopTitle } from '../include/title' ;
 	STEP 01
 	Title , Location , Memo
 */
-class RegistStep01 extends Component {
+class RegisterSummary extends Component {
 	constructor( props ) {
 		super( props ) ;
 
@@ -117,4 +117,4 @@ class RegistStep01 extends Component {
 	}
 }
 
-export { RegistStep01 } ;
+export { RegisterSummary } ;

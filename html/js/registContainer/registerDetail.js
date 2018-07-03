@@ -8,7 +8,7 @@ import { TopTitle } from '../include/title' ;
 	STEP 02
 	날짜 , 참여자
 */
-class RegistStep02 extends Component {
+class RegisterDetail extends Component {
 	constructor( props ) {
 		super( props ) ;
 
@@ -315,4 +315,4 @@ class RegistStep02 extends Component {
 	}
 }
 
-export { RegistStep02 } ;
+export { RegisterDetail } ;

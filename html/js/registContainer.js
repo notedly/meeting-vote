@@ -1,8 +1,8 @@
 import React , { Component } from 'react' ;
 import ReactDOM , { render } from 'react-dom' ;
-import { RegistStep01 } from './registContainer/registStep01' ;
-import { RegistStep02 } from './registContainer/registStep02' ;
-import { RegistStep03 } from './registContainer/registStep03' ;
+import { RegisterSummary } from './registContainer/registerSummary' ;
+import { RegisterDetail } from './registContainer/registerDetail' ;
+import { RegisterPreview } from './registContainer/registerPreview' ;
 import common from './include/common' ;
 import PromiseSetter from '../lib/common' ;
 
@@ -135,13 +135,13 @@ class RegisterContainer extends Component {
 
 		switch( this.state.pageStep ){
 			case '01' :
-				return ( <RegistStep01 {...regSummaryProps} /> ) ;
+				return ( <RegisterSummary {...regSummaryProps} /> ) ;
 			break ;
 			case '02' :
-				return ( <RegistStep02 {...regDetailProps} /> ) ;
+				return ( <RegisterDetail {...regDetailProps} /> ) ;
 			break ;
 			case '03' :
-				return ( <RegistStep03 {...regPreviewProps} /> ) ;
+				return ( <RegisterPreview {...regPreviewProps} /> ) ;
 			break ;
 		}
 
