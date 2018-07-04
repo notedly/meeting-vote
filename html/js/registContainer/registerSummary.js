@@ -60,6 +60,78 @@ class RegisterSummary extends Component {
 
 	render () {
 
+/*
+
+		class InputWrap extends Component {
+	constructor ( props ) {
+		super( props ) ;
+
+		// [ props ]
+		// @filedType : input or textarea ... ?
+		// @label :
+	}
+
+	render () {
+		let field =
+		switch ( this.props.filedType ) {
+			case 0 :
+				field = <textarea name="" id="" cols="30" rows="10"></textarea>
+			default :
+				field = <input type="text">
+			break ;
+		}
+
+		return (
+			<label for="">{ this.props.label }</label>
+			{ field }
+		)
+	}
+}
+
+
+____________________________
+
+this.state = {
+	fieldSet : [
+		{
+			direct : 0 : 1 ,
+			type : 'text' ,
+			placeholder : '주최자를 작성하여주십시오.' ,
+			value : this.state.name ,
+			onChange : this.nameInputHandler ,
+			ref : input => this.nameInput = input
+		} ,
+		{
+			type : 'text' ,
+			placeholder : '주최자를 작성하여주십시오.' ,
+			value : this.state.name ,
+			onChange : this.nameInputHandler ,
+			ref : input => this.nameInput = input
+		} ,
+		{
+			type : 'text' ,
+			placeholder : '주최자를 작성하여주십시오.' ,
+			value : this.state.name ,
+			onChange : this.nameInputHandler ,
+			ref : input => this.nameInput = input
+		} ,
+		{
+			type : 'text' ,
+			placeholder : '주최자를 작성하여주십시오.' ,
+			value : this.state.name ,
+			onChange : this.nameInputHandler ,
+			ref : input => this.nameInput = input
+		} ,
+	]
+}
+
+makeFiled = ( filed ) => {
+
+}
+
+this.state.fieldSet.map( this.makeFiled )
+		*/
+
 		let nameProps = {
 			type : 'text' ,
 			placeholder : '주최자를 작성하여주십시오.' ,

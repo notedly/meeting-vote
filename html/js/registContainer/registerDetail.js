@@ -15,7 +15,7 @@ class RegisterDetail extends Component {
 		this.state = {
 			meetEmail : this.props.meetEmail || [] ,
 			selectedDaysConvert : this.props.meetDays || [],
-			selectedDays: [],
+			selectedDays: this.props.meetDaysOrigin || [],
 			calendarOpen : false ,
 			meetEmailValue : '' ,
 			meetEmailOriginValue : '' ,
@@ -88,6 +88,7 @@ class RegisterDetail extends Component {
 
 		// 선택한 날짜 로컬스토리지에 저장
 		localStorage.setItem( 'meetDays' , JSON.stringify( selectedDaysConvert ) ) ;
+		localStorage.setItem( 'meetDaysOrigin' , JSON.stringify( this.state.selectedDays ) ) ;
 
 	}
 
