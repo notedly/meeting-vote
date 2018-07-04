@@ -2,6 +2,7 @@ import React , { Component } from 'react' ;
 import ReactDOM , { render } from 'react-dom' ;
 import { TopTitle } from '../include/title' ;
 import { InputWrap } from '../include/inputWrap' ;
+import { BtnWrap } from '../include/btnWrap' ;
 
 /*
 	STEP 01
@@ -30,6 +31,7 @@ class RegisterSummary extends Component {
 		/* 입력 폼 리스트 */
 		this.field = [
 			 {
+			 	// direct : 0 : 1 , --> 0 일 경우 왼쪽 정렬 , 1 일 경우 오른쪽 정렬
 				type : 'text' ,
 				label : '주최자' ,
 				placeholder : '주최자를 작성하여주십시오.' ,
@@ -63,6 +65,23 @@ class RegisterSummary extends Component {
 			}
 		] ;
 
+		this.btns = [
+			{
+				type : 'A' ,	// A or BUTTON
+				href : '#;' ,
+				label : '이전' ,
+				class : 'btn' ,
+				handler : () => this.goToPrevPage()
+			} ,
+			{
+				type : 'A' ,	// A or BUTTON
+				href : '#;' ,
+				label : '다음' ,
+				class : 'btn' ,
+				handler : () => this.goToNextStep()
+			}
+		] ;
+
 	}
 
 	nameInputHandler = ( data ) => {
@@ -90,14 +109,21 @@ class RegisterSummary extends Component {
 	}
 
 	goToNextStep = ( e ) => {
-		e.preventDefault() ;
+		console.log( 'goToNextStep in' ) ;
 		let { name, title, loc, memo } = this.state ;
 		this.props.goToNextStep({ name, title, loc, memo });
 	}
 
+	goToPrevPage = () => {
+		console.log( 'goToPrevPage in' ) ;
+	}
+
 	render () {
 
-		let makeField = ( field, idx ) => {
+		let topTitleProps = {
+			text : 'STEP 01. 무슨 모임이야?'
+		} ,
+		makeField = ( field, idx ) => {
 			let props = {
 				key : `field${idx}` ,
 				options : {
@@ -111,10 +137,19 @@ class RegisterSummary extends Component {
 				}
 			}
 			return <InputWrap {...props} />
-		}
-
-		let topTitleProps = {
-			text : 'STEP 01. 무슨 모임이야?'
+		} ,
+		makeBtns = ( btn, idx ) => {
+			let props = {
+				key : `btn${idx}` ,
+				options : {
+					type : btn.type ,
+					href : btn.href ,
+					label : btn.label ,
+					onClick : btn.handler ,
+					class : btn.class
+				}
+			}
+			return <BtnWrap {...props} />
 		}
 
 		return (
@@ -129,8 +164,7 @@ class RegisterSummary extends Component {
 				</div>
 
 				<div className="btn_area">
-					<a href="http://naver.com" className="btn" onClick={this.goToNextStep}>다음</a>
-					{/*<a href="/register?step=02" className="btn" onClick={this.goToNextStep}>다음</a>*/}
+					{ this.btns.map( makeBtns ) }
 				</div>
 
 			</div>

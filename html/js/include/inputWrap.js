@@ -47,9 +47,26 @@ class InputWrap extends Component {
 			<div className="field">
 				<label htmlFor={opts.id}>{opts.label}</label>
 				{ field }
+
 			</div>
 		) ;
 	}
 }
 
 export { InputWrap } ;
+
+
+/*{(()=>{
+	let field = null ;
+	switch( opts.type ){
+		case 'text' :
+			field = <input {...props} />
+			break ;
+		case 'textarea' :
+			field = <textarea {...props} ></textarea>
+			break ;
+		default :
+			field = <input type="text" className="default" />
+	}
+	return field
+})()}*/
