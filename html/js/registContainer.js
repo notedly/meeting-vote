@@ -43,8 +43,6 @@ class RegisterContainer extends Component {
 			this.state.meetEmail = infoEmail ;
 		}
 
-		console.log( 'infoDaysOrigin : ', infoDaysOrigin ) ;
-
 	}
 
 	getParameter( strParamName ){

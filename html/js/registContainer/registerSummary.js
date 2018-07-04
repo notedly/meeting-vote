@@ -1,6 +1,7 @@
 import React , { Component } from 'react' ;
 import ReactDOM , { render } from 'react-dom' ;
 import { TopTitle } from '../include/title' ;
+import { InputWrap } from '../include/inputWrap' ;
 
 /*
 	STEP 01
@@ -26,29 +27,65 @@ class RegisterSummary extends Component {
 		@memo : 추가 내용
 		*/
 
+		/* 입력 폼 리스트 */
+		this.field = [
+			 {
+				type : 'text' ,
+				label : '주최자' ,
+				placeholder : '주최자를 작성하여주십시오.' ,
+				value : this.state.name ,
+				handler : this.nameInputHandler ,
+				ref : input => this.nameInput = input
+			} ,
+			{
+				type : 'text' ,
+				label : '모임명' ,
+				placeholder : '모임명을 작성하여주십시오.' ,
+				value : this.state.title ,
+				handler : this.titleInputHandler ,
+				ref : input => this.titleInput = input
+			} ,
+			{
+				type : 'text' ,
+				label : '위치' ,
+				placeholder : '위치를 작성하여주십시오.' ,
+				value : this.state.loc ,
+				handler : this.locInputHandler ,
+				ref : input => this.locInput = input
+			} ,
+			 {
+			 	type : 'textarea' ,
+			 	label : '메모' ,
+			 	placeholder : '추가로 전달할 메모를 작성하여주십시오.' ,
+				value : this.state.memo ,
+				handler : this.memoInputHandler ,
+				ref : textarea => this.memoInput = textarea
+			}
+		] ;
+
 	}
 
-	nameInputHandler = ( e ) => {
+	nameInputHandler = ( data ) => {
 		this.setState({
-			name : e.target.value ,
+			name : data ,
 		}) ;
 	}
 
-	titleInputHandler = ( e ) => {
+	titleInputHandler = ( data ) => {
 		this.setState({
-			title : e.target.value ,
+			title : data ,
 		}) ;
 	}
 
-	locInputHandler = ( e ) => {
+	locInputHandler = ( data ) => {
 		this.setState({
-			loc : e.target.value ,
+			loc : data ,
 		}) ;
 	}
 
-	memoInputHandler = ( e ) => {
+	memoInputHandler = ( data ) => {
 		this.setState({
-			memo : e.target.value ,
+			memo : data ,
 		}) ;
 	}
 
@@ -60,105 +97,20 @@ class RegisterSummary extends Component {
 
 	render () {
 
-/*
-
-		class InputWrap extends Component {
-	constructor ( props ) {
-		super( props ) ;
-
-		// [ props ]
-		// @filedType : input or textarea ... ?
-		// @label :
-	}
-
-	render () {
-		let field =
-		switch ( this.props.filedType ) {
-			case 0 :
-				field = <textarea name="" id="" cols="30" rows="10"></textarea>
-			default :
-				field = <input type="text">
-			break ;
-		}
-
-		return (
-			<label for="">{ this.props.label }</label>
-			{ field }
-		)
-	}
-}
-
-
-____________________________
-
-this.state = {
-	fieldSet : [
-		{
-			direct : 0 : 1 ,
-			type : 'text' ,
-			placeholder : '주최자를 작성하여주십시오.' ,
-			value : this.state.name ,
-			onChange : this.nameInputHandler ,
-			ref : input => this.nameInput = input
-		} ,
-		{
-			type : 'text' ,
-			placeholder : '주최자를 작성하여주십시오.' ,
-			value : this.state.name ,
-			onChange : this.nameInputHandler ,
-			ref : input => this.nameInput = input
-		} ,
-		{
-			type : 'text' ,
-			placeholder : '주최자를 작성하여주십시오.' ,
-			value : this.state.name ,
-			onChange : this.nameInputHandler ,
-			ref : input => this.nameInput = input
-		} ,
-		{
-			type : 'text' ,
-			placeholder : '주최자를 작성하여주십시오.' ,
-			value : this.state.name ,
-			onChange : this.nameInputHandler ,
-			ref : input => this.nameInput = input
-		} ,
-	]
-}
-
-makeFiled = ( filed ) => {
-
-}
-
-this.state.fieldSet.map( this.makeFiled )
-		*/
-
-		let nameProps = {
-			type : 'text' ,
-			placeholder : '주최자를 작성하여주십시오.' ,
-			value : this.state.name ,
-			onChange : this.nameInputHandler ,
-			ref : input => this.nameInput = input
-		}
-
-		let titleProps = {
-			type : 'text' ,
-			placeholder : '모임명을 작성하여주십시오.' ,
-			value : this.state.title ,
-			onChange : this.titleInputHandler ,
-			ref : input => this.titleInput = input
-		}
-
-		let locProps = {
-			type : 'text' ,
-			placeholder : '위치를 작성하여주십시오.' ,
-			value : this.state.loc ,
-			onChange : this.locInputHandler ,
-			ref : input => this.locInput = input
-		}
-
-		let memoProps = {
-			onChange : this.memoInputHandler ,
-			value : this.state.memo
+		let makeField = ( field, idx ) => {
+			let props = {
+				key : `field${idx}` ,
+				options : {
+					id : `field${idx}` ,
+					type : field.type ,
+					label : field.label ,
+					placeholder : field.placeholder ,
+					value : field.value ,
+					onChange : field.handler ,
+					ref : field.ref
+				}
+			}
+			return <InputWrap {...props} />
 		}
 
 		let topTitleProps = {
@@ -167,23 +119,20 @@ this.state.fieldSet.map( this.makeFiled )
 
 		return (
 			<div className="wrap_register">
+
 				<TopTitle {...topTitleProps} />
+
 				<div className="form">
-
 					<div className="ct">
-						<ul>
-							<li><label>주최자 : <input {...nameProps} /></label></li>
-							<li><label>모임명 : <input {...titleProps} /></label></li>
-							<li><label>위치 : <input {...locProps} /></label></li>
-							<li><label>메모 : <textarea {...memoProps}></textarea></label></li>
-						</ul>
+						{ this.field.map( makeField ) }
 					</div>
-
 				</div>
+
 				<div className="btn_area">
 					<a href="http://naver.com" className="btn" onClick={this.goToNextStep}>다음</a>
 					{/*<a href="/register?step=02" className="btn" onClick={this.goToNextStep}>다음</a>*/}
 				</div>
+
 			</div>
 		) ;
 	}
