@@ -68,17 +68,23 @@ class RegisterSummary extends Component {
 		this.btns = [
 			{
 				type : 'A' ,	// A or BUTTON
-				href : '#;' ,
+				href : '/' ,
 				label : '이전' ,
-				class : 'btn' ,
-				handler : () => this.goToPrevPage()
+				class : 'btn'
 			} ,
 			{
 				type : 'A' ,	// A or BUTTON
 				href : '#;' ,
 				label : '다음' ,
 				class : 'btn' ,
-				handler : () => this.goToNextStep()
+				handler : () => this.goToMeetDetailStep()
+			} ,
+			{
+				type : 'A' ,	// A or BUTTON
+				href : '#;' ,
+				label : '초기화' ,
+				class : 'btn' ,
+				handler : () => this.goToMeetResetSummary()
 			}
 		] ;
 
@@ -108,14 +114,23 @@ class RegisterSummary extends Component {
 		}) ;
 	}
 
-	goToNextStep = ( e ) => {
-		console.log( 'goToNextStep in' ) ;
+	goToMeetDetailStep = ( e ) => {
 		let { name, title, loc, memo } = this.state ;
-		this.props.goToNextStep({ name, title, loc, memo });
+		this.props.goToMeetDetailStep({ name, title, loc, memo });
 	}
 
-	goToPrevPage = () => {
-		console.log( 'goToPrevPage in' ) ;
+	// goToMeetHome = ( e ) => {
+	// 	this.props.goToMeetHome() ;
+	// }
+
+	goToMeetHome = () => {
+		location.href ='/' ;
+	}
+
+	goToMeetResetSummary = () => {
+		console.log( 'go to meet reset' ) ;
+		localStorage.removeItem('meetSummary');
+		location.href ='/register?step=01' ;
 	}
 
 	render () {
@@ -158,14 +173,10 @@ class RegisterSummary extends Component {
 				<TopTitle {...topTitleProps} />
 
 				<div className="form">
-					<div className="ct">
-						{ this.field.map( makeField ) }
-					</div>
+					<div className="ct">{ this.field.map( makeField ) }</div>
 				</div>
 
-				<div className="btn_area">
-					{ this.btns.map( makeBtns ) }
-				</div>
+				<div className="btn_area">{ this.btns.map( makeBtns ) }</div>
 
 			</div>
 		) ;

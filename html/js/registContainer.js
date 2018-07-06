@@ -77,7 +77,7 @@ class RegisterContainer extends Component {
 		return true ;
 	}
 
-	validationChk = ( data ) => {
+	meetSummaryValidationChk = ( data ) => {
 
 		let { name , title, loc, memo } = data;
 
@@ -96,14 +96,22 @@ class RegisterContainer extends Component {
 
 	}
 
-	goToNextStep = ( data ) => {
+	goToMeetDetailStep = ( data ) => {
 
-		let chk = this.validationChk( data ) ;
+		let chk = this.meetSummaryValidationChk( data ) ;
 		if( chk ) {
 			location.href = '/register?step=02' ;
 		}
 
 	}
+
+	// goToMeetHome = () => {
+	// 	location.href ='/' ;
+	// }
+
+	// goToMeetReset = () => {
+	// 	console.log( 'goToMeetReset' ) ;
+	// }
 
 	render () {
 
@@ -112,7 +120,9 @@ class RegisterContainer extends Component {
 			title : this.state.title ,
 			loc : this.state.loc ,
 			memo : this.state.memo ,
-			goToNextStep : this.goToNextStep ,
+			goToMeetDetailStep : this.goToMeetDetailStep ,
+			// goToMeetHome : this.goToMeetHome ,
+			// goToMeetReset : this.goToMeetReset ,
 			ref : registerContents => this.registerContents = registerContents
 		}
 

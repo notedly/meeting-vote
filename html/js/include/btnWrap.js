@@ -9,20 +9,20 @@ class BtnWrap extends Component {
 		this.state = {
 			btns : this.props.options
 		}
-		console.log( this.state.btns ) ;
 	}
 
 	clickHandler = (e) => {
-		console.log( 'click in' ) ;
-		e.preventDefault() ;
-		this.state.btns.onClick() ;
+		if( this.state.btns.onClick ) {
+			e.preventDefault() ;
+			this.state.btns.onClick() ;
+		}
 	}
 
 	render () {
 
 		let opts = this.state.btns
 		,	 props = {
-			onClick : this.clickHandler ,
+			onClick : this.clickHandler,
 			className : opts.class
 		}
 
