@@ -5,11 +5,13 @@ import { RegisterDetail } from './registContainer/registerDetail' ;
 import { RegisterPreview } from './registContainer/registerPreview' ;
 import common from './include/common' ;
 import PromiseSetter from '../lib/common' ;
+import Register from './registContainer/Register' ;
 
 class RegisterContainer extends Component {
 	constructor( props ){
 		super( props ) ;
 
+		this.register = new Register ;
 
 		let infoSummary = JSON.parse( localStorage.getItem('meetSummary') )
 		,	 infoDays = JSON.parse( localStorage.getItem('meetDays') )
@@ -17,7 +19,7 @@ class RegisterContainer extends Component {
 		,	 infoEmail = JSON.parse( localStorage.getItem('meetEmail') ) ;
 
 		this.state = {
-			pageStep : this.getParameter('step') ,
+			pageStep : this.register.getParameter('step') ,
 			name : null ,
 			title : null ,
 			loc : null ,
@@ -43,22 +45,6 @@ class RegisterContainer extends Component {
 			this.state.meetEmail = infoEmail ;
 		}
 
-	}
-
-	getParameter( strParamName ){
-		var strURL = location.search
-		,	 tmpParam = strURL.substring(1).split("&");
-
-		if(strURL.substring(1).length > 0){
-			var Params = new Array;
-			for(var i=0;i<tmpParam.length;i++){
-				Params = tmpParam[i].split("=");
-				if(strParamName == Params[0]){
-					return Params[1];
-				}
-			}
-		}
-		return "";
 	}
 
 	/*
@@ -100,18 +86,15 @@ class RegisterContainer extends Component {
 
 		let chk = this.meetSummaryValidationChk( data ) ;
 		if( chk ) {
-			location.href = '/register?step=02' ;
+			location.href = '/register?step=2' ;
 		}
 
 	}
 
-	// goToMeetHome = () => {
-	// 	location.href ='/' ;
-	// }
-
-	// goToMeetReset = () => {
-	// 	console.log( 'goToMeetReset' ) ;
-	// }
+	registerComplete = () => {
+		console.log( 'registerComplete in' ) ;
+		location.href = '/voting' ;
+	}
 
 	render () {
 
@@ -121,8 +104,6 @@ class RegisterContainer extends Component {
 			loc : this.state.loc ,
 			memo : this.state.memo ,
 			goToMeetDetailStep : this.goToMeetDetailStep ,
-			// goToMeetHome : this.goToMeetHome ,
-			// goToMeetReset : this.goToMeetReset ,
 			ref : registerContents => this.registerContents = registerContents
 		}
 
@@ -139,16 +120,17 @@ class RegisterContainer extends Component {
 			memo : this.state.memo ,
 			meetDays : this.state.meetDays ,
 			meetEmail : this.state.meetEmail ,
+			registerComplete : this.registerComplete
 		}
 
 		switch( this.state.pageStep ){
-			case '01' :
+			case '1' :
 				return ( <RegisterSummary {...regSummaryProps} /> ) ;
 			break ;
-			case '02' :
+			case '2' :
 				return ( <RegisterDetail {...regDetailProps} /> ) ;
 			break ;
-			case '03' :
+			case '3' :
 				return ( <RegisterPreview {...regPreviewProps} /> ) ;
 			break ;
 		}

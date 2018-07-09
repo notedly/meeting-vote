@@ -117,3 +117,11 @@
 		}
 	}
 }
+
+.tb_voting{
+	border-collapse: collapse;
+	border-spacing: 0;
+	th, td{
+		border:1px solid #333;
+	}
+}

@@ -3,6 +3,8 @@ import ReactDOM , { render } from 'react-dom' ;
 import DayPicker, { DateUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { TopTitle } from '../include/title' ;
+import { BtnWrap } from '../include/btnWrap' ;
+import Register from './Register' ;
 
 /*
 	STEP 02
@@ -15,7 +17,7 @@ class RegisterDetail extends Component {
 		this.state = {
 			meetEmail : this.props.meetEmail || [] ,
 			selectedDaysConvert : this.props.meetDays || [],
-			selectedDays: this.props.meetDaysOrigin || [],
+			selectedDays: [],
 			calendarOpen : false ,
 			meetEmailValue : '' ,
 			meetEmailOriginValue : '' ,
@@ -23,11 +25,13 @@ class RegisterDetail extends Component {
 			modifyOpen : false
 		}
 
+		console.log( this.props.meetDaysOrigin ) ;
+		console.log( '현재 선택된 날짜 :', this.state.selectedDays )
+
 		/**
 		[ props ]
 		@meetEmail : 참여자 이메일 배열 리스트
 		@selectedDaysConvert : 모임 날짜 배열 리스트 ( 변환 정보 )
-
 		[ state ]
 		@selectDays : 달력에서 선택한 날짜가 들어가는 배열리스트
 		@calendarOpen : 달력 펼침/닫힘 유무
@@ -37,8 +41,30 @@ class RegisterDetail extends Component {
 		@modifyOpen : 수정 입력창 펼침/닫힘 유무
 		*/
 
+		this.register = new Register ;
+
+		this.btns = [
+			{
+				type : 'A' ,	// A or BUTTON
+				href : '#;' ,
+				label : '이전' ,
+				class : 'btn' ,
+				handler : () => this.register.pageMove('prev')
+			} ,
+			{
+				type : 'A' ,	// A or BUTTON
+				href : '#;' ,
+				label : '다음' ,
+				class : 'btn' ,
+				handler : () => this.register.pageMove('next')
+			}
+		] ;
+
 		this.handleDayClick = this.handleDayClick.bind(this);
 		this.confirmClickHandler = this.confirmClickHandler.bind(this);
+
+		// let t = new Date(2017, 3, 12) ;
+		// console.log( 't : ', t ) ;
 
 	}
 
@@ -63,6 +89,7 @@ class RegisterDetail extends Component {
 		} else {
 			selectedDays.push(day);
 		}
+		console.log( selectedDays ) ;
 		this.setState({ selectedDays });
 	}
 
@@ -75,8 +102,14 @@ class RegisterDetail extends Component {
 		let day = [ '일', '월', '화', '수', '목', '금', '토' ]
 		,	 select = null ;
 
+		// console.log( this.state.selectedDaysConvert) ;
+		// console.log( this.state.selectedDays) ;
+
+		console.log( this.state.selectedDays ) ;
+
 		// 변환
-		let selectedDaysConvert = this.state.selectedDays.map((item) => select = { no : item.getTime(), month : item.getMonth() , day : day[ item.getDay() ] , date : item.getDate() }) ;
+		let selectedDaysConvert = this.state.selectedDays.map(item => select = { no : item.getTime(), month : item.getMonth() , day : day[ item.getDay() ] , date : item.getDate() }) ;
+
 
 		// 날짜순 정렬
 		selectedDaysConvert = selectedDaysConvert.sort((a, b) => a.no - b.no) ;
@@ -86,7 +119,7 @@ class RegisterDetail extends Component {
 			calendarOpen : !this.state.calendarOpen
 		}) ;
 
-		// 선택한 날짜 로컬스토리지에 저장
+		// // 선택한 날짜 로컬스토리지에 저장
 		localStorage.setItem( 'meetDays' , JSON.stringify( selectedDaysConvert ) ) ;
 		localStorage.setItem( 'meetDaysOrigin' , JSON.stringify( this.state.selectedDays ) ) ;
 
@@ -249,6 +282,19 @@ class RegisterDetail extends Component {
 		let topTitleProps = {
 			text : 'STEP 02. 언제?누구와?'
 		}
+		, makeBtns = ( btn, idx ) => {
+			let props = {
+				key : `btn${idx}` ,
+				options : {
+					type : btn.type ,
+					href : btn.href ,
+					label : btn.label ,
+					onClick : btn.handler ,
+					class : btn.class
+				}
+			}
+			return <BtnWrap {...props} />
+		}
 
 		return(
 			<div className="wrap_register">
@@ -266,7 +312,7 @@ class RegisterDetail extends Component {
 										selectedDays={this.state.selectedDays}
 										onDayClick={this.handleDayClick}
 									/>
-									<button type="button" className="btn_day_select" onClick={this.confirmClickHandler}>OK</button>
+									<button type="button" className="btn btn_day_select" onClick={this.confirmClickHandler}>날짜 선택완료</button>
 								</div>
 								<ul className="lst_slt_days">{this.state.selectedDaysConvert.map( this.selectListMakeHandler , this )}</ul>
 							</li>
@@ -307,10 +353,7 @@ class RegisterDetail extends Component {
 					</div>
 
 				</div>
-				<div className="btn_area">
-					<a href="/register?step=01" className="btn">이전</a>
-					<a href="/register?step=03" className="btn">다음</a>
-				</div>
+				<div className="btn_area">{ this.btns.map( makeBtns ) }</div>
 			</div>
 		)
 	}

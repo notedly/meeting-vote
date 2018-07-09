@@ -1,6 +1,8 @@
 import React , { Component } from 'react' ;
 import ReactDOM , { render } from 'react-dom' ;
 import { TopTitle } from '../include/title' ;
+import { BtnWrap } from '../include/btnWrap' ;
+import Register from './Register' ;
 
 /*
 	STEP 01
@@ -12,6 +14,27 @@ class RegisterPreview extends Component {
 		this.state = {
 			meetTotal : this.props.meetEmail.length
 		}
+
+		this.register = new Register ;
+
+		this.btns = [
+			{
+				type : 'A' ,	// A or BUTTON
+				href : '#;' ,
+				label : '이전' ,
+				class : 'btn' ,
+				handler : () => this.register.pageMove('prev')
+			} ,
+			{
+				type : 'A' ,	// A or BUTTON
+				href : '#;' ,
+				label : '완료' ,
+				class : 'btn' ,
+				handler : () => this.props.registerComplete()
+			}
+		] ;
+
+		console.log( this.props ) ;
 	}
 
 	daysListMakeHandler( days, idx ){
@@ -31,39 +54,52 @@ class RegisterPreview extends Component {
 		let topTitleProps = {
 			text : 'STEP 03. 미리보기'
 		}
+		, previewInfo = this.props
+		, makeBtns = ( btn, idx ) => {
+			let props = {
+				key : `btn${idx}` ,
+				options : {
+					type : btn.type ,
+					href : btn.href ,
+					label : btn.label ,
+					onClick : btn.handler ,
+					class : btn.class
+				}
+			}
+			return <BtnWrap {...props} />
+		} ;
 
 		return (
 			<div className="wrap_register preview">
 				<TopTitle {...topTitleProps} />
 
 				<div className="top">
-					<h2>{this.props.title}</h2>
+					<h2>{previewInfo.title}</h2>
 				</div>
 
 				<dl className="contents">
 					<dt>주최자</dt>
-					<dd>{this.props.name}</dd>
+					<dd>{previewInfo.name}</dd>
 					<dt>모임 투표 날짜</dt>
 					<dd>
 						<ul className="lst_preview">
-							{this.props.meetDays.map( this.daysListMakeHandler , this )}
+							{previewInfo.meetDays.map( this.daysListMakeHandler , this )}
 						</ul>
 					</dd>
 					<dt>모임 참여자(<span>총 {this.state.meetTotal}명</span>)</dt>
 					<dd>
 						<ul className="lst_preview">
-							{this.props.meetEmail.map( this.emailListMakeHandler , this )}
+							{previewInfo.meetEmail.map( this.emailListMakeHandler , this )}
 						</ul>
 					</dd>
 					<dt>모임 장소</dt>
-					<dd>{this.props.loc}</dd>
+					<dd>{previewInfo.loc}</dd>
 					<dt>추가 내용</dt>
-					<dd>{this.props.memo}</dd>
+					<dd>{previewInfo.memo}</dd>
 				</dl>
 
 				<div className="btn_area">
-					<a href="/register?step=02" className="btn">이전</a>
-					<a href="#;" className="btn">완료</a>
+					{ this.btns.map( makeBtns ) }
 				</div>
 
 			</div>

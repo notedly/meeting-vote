@@ -3,6 +3,7 @@ import ReactDOM , { render } from 'react-dom' ;
 import { TopTitle } from '../include/title' ;
 import { InputWrap } from '../include/inputWrap' ;
 import { BtnWrap } from '../include/btnWrap' ;
+import Register from './Register' ;
 
 /*
 	STEP 01
@@ -18,6 +19,8 @@ class RegisterSummary extends Component {
 			loc : this.props.loc || '' ,
 			memo : this.props.memo || '' ,
 		}
+
+		this.register = new Register ;
 
 		/**
 		[ props ]
@@ -68,9 +71,10 @@ class RegisterSummary extends Component {
 		this.btns = [
 			{
 				type : 'A' ,	// A or BUTTON
-				href : '/' ,
+				href : '#;' ,
 				label : '이전' ,
-				class : 'btn'
+				class : 'btn' ,
+				handler : () => this.register.pageMove('prev')
 			} ,
 			{
 				type : 'A' ,	// A or BUTTON
@@ -78,6 +82,7 @@ class RegisterSummary extends Component {
 				label : '다음' ,
 				class : 'btn' ,
 				handler : () => this.goToMeetDetailStep()
+				// handler : () => this.register.pageMove('next')
 			} ,
 			{
 				type : 'A' ,	// A or BUTTON
@@ -119,18 +124,9 @@ class RegisterSummary extends Component {
 		this.props.goToMeetDetailStep({ name, title, loc, memo });
 	}
 
-	// goToMeetHome = ( e ) => {
-	// 	this.props.goToMeetHome() ;
-	// }
-
-	goToMeetHome = () => {
-		location.href ='/' ;
-	}
-
 	goToMeetResetSummary = () => {
-		console.log( 'go to meet reset' ) ;
 		localStorage.removeItem('meetSummary');
-		location.href ='/register?step=01' ;
+		location.href ='/register?step=1' ;
 	}
 
 	render () {

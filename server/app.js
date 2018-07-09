@@ -36,6 +36,10 @@ app.get( '/register' , ( req , res ) => {
 	res.render( 'register' , {} ) ;
 }) ;
 
+app.get( '/voting' , ( req , res ) => {
+	res.render( 'voting' , {} ) ;
+}) ;
+
 const server = app.listen( DIR.PORT , () => {
 	console.log( 'Express listening on port : ' +  server.address().port) ;
 }) ;
