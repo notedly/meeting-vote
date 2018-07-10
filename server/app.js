@@ -36,8 +36,16 @@ app.get( '/register' , ( req , res ) => {
 	res.render( 'register' , {} ) ;
 }) ;
 
+app.get( '/complete' , ( req , res ) => {
+	res.render( 'complete' , {} ) ;
+}) ;
+
 app.get( '/voting' , ( req , res ) => {
 	res.render( 'voting' , {} ) ;
+}) ;
+
+app.get( '/voting_result' , ( req , res ) => {
+	res.render( 'voting_result' , {} ) ;
 }) ;
 
 const server = app.listen( DIR.PORT , () => {

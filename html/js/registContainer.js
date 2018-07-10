@@ -92,8 +92,7 @@ class RegisterContainer extends Component {
 	}
 
 	registerComplete = () => {
-		console.log( 'registerComplete in' ) ;
-		location.href = '/voting' ;
+		location.href = '/complete' ;
 	}
 
 	render () {
