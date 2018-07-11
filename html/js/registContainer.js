@@ -16,7 +16,7 @@ class RegisterContainer extends Component {
 		let infoSummary = JSON.parse( localStorage.getItem('meetSummary') )
 		,	 infoDays = JSON.parse( localStorage.getItem('meetDays') )
 		, 	 infoDaysOrigin = JSON.parse( localStorage.getItem('meetDaysOrigin') )
-		,	 infoEmail = JSON.parse( localStorage.getItem('meetEmail') ) ;
+		,	 infoPerson = JSON.parse( localStorage.getItem('meetPerson') ) ;
 
 		this.state = {
 			pageStep : this.register.getParameter('step') ,
@@ -26,7 +26,7 @@ class RegisterContainer extends Component {
 			memo : null ,
 			meetDays : null ,
 			meetDaysOrigin : null ,
-			meetEmail : null
+			meetPerson : null
 		}
 
 		if( infoSummary ) {
@@ -41,8 +41,8 @@ class RegisterContainer extends Component {
 			this.state.meetDaysOrigin = infoDaysOrigin ;
 		}
 
-		if( infoEmail ) {
-			this.state.meetEmail = infoEmail ;
+		if( infoPerson ) {
+			this.state.meetPerson = infoPerson ;
 		}
 
 	}
@@ -109,7 +109,7 @@ class RegisterContainer extends Component {
 		let regDetailProps = {
 			meetDays : this.state.meetDays ,
 			meetDaysOrigin : this.state.meetDaysOrigin ,
-			meetEmail : this.state.meetEmail ,
+			meetPerson : this.state.meetPerson ,
 		}
 
 		let regPreviewProps = {
@@ -118,7 +118,7 @@ class RegisterContainer extends Component {
 			loc : this.state.loc ,
 			memo : this.state.memo ,
 			meetDays : this.state.meetDays ,
-			meetEmail : this.state.meetEmail ,
+			meetPerson : this.state.meetPerson ,
 			registerComplete : this.registerComplete
 		}
 

@@ -12,7 +12,7 @@ class RegisterPreview extends Component {
 	constructor( props ) {
 		super( props ) ;
 		this.state = {
-			meetTotal : this.props.meetEmail.length
+			meetTotal : this.props.meetPerson.length
 		}
 
 		this.register = new Register ;
@@ -43,9 +43,12 @@ class RegisterPreview extends Component {
 		)
 	}
 
-	emailListMakeHandler( email, idx ){
+	emailListMakeHandler( person, idx ){
 		return(
-			<li key={idx}>{email}</li>
+			<li key={idx}>
+				<strong>{person.name}</strong>
+				<span>{person.email}</span>
+			</li>
 		)
 	}
 
@@ -89,7 +92,7 @@ class RegisterPreview extends Component {
 					<dt>모임 참여자(<span>총 {this.state.meetTotal}명</span>)</dt>
 					<dd>
 						<ul className="lst_preview">
-							{previewInfo.meetEmail.map( this.emailListMakeHandler , this )}
+							{previewInfo.meetPerson.map( this.emailListMakeHandler , this )}
 						</ul>
 					</dd>
 					<dt>모임 장소</dt>
