@@ -21,7 +21,8 @@ class VotingContainer extends Component {
 			meetDays : null ,
 			meetPerson : null ,
 			personData : null ,
-			chkArr : []
+			chkArr : [] ,
+			checkedDays : []
 		}
 
 		if( infoSummary ) {
@@ -45,7 +46,32 @@ class VotingContainer extends Component {
 		let personData = this.state.meetPerson.filter(item => item.name == person )[0] ;
 		this.state.personData = personData ? personData : [] ;
 
-		console.log( this.state.meetPerson ) ;
+		this.state.checkedDays = personData ? personData.checkedDays : [] ;
+
+
+		console.log( '참여자 정보 : ', this.state.meetPerson ) ;
+		console.log( '투표 날짜 정보 : ', this.state.meetDays ) ;
+
+		// console.log( '현재 페이지 : ', this.state.personData ) ;
+		console.log( '선택한 날짜 : ', this.state.checkedDays ) ;
+
+
+		/* 선택한 날짜 인덱스를 저장해야한다.
+		스토리지에 저장되어있는 선택된 날짜를 가져와서 indexOf로 어디에 위치했는지 찾아서 배열로 저장한다. */
+
+		let daysNum = this.state.meetDays.map((item) => item.no) ;
+
+		console.log( '투표 날짜 NO : ', daysNum ) ;
+
+
+		if( this.state.checkedDays ){
+			this.state.checkedDays.forEach((item) => {
+				let idx = daysNum.indexOf( item ) ;
+				if( idx >= 0 ) this.state.chkArr.push( idx ) ;
+			}) ;
+		}
+
+		console.log( '선택한 날짜 인덱스 :' ,this.state.chkArr ) ;
 
 	}
 
@@ -55,54 +81,32 @@ class VotingContainer extends Component {
 
 	componentDidUpdate(){
 		// console.log( 'componentDidUpdate :', this.state.chkArr ) ;
-		this.watchChkArr() ;
+		// this.watchChkArr() ;
 	}
-
-	watchChkArr() {
-		let crntChkArr = this.state.chkArr ;
-		// console.log( 'watchChkArr in------> ', crntChkArr ) ;
-		/*let result = crntChkArr.filter((item, idx) => {
-			console.log( item ) ;
-		}) ;*/
-
-		/*let result = crntChkArr.map((item) => {
-			return item.reduce((a, b) => a+b) ;
-		}, []) ;
-		console.log( result ) ;*/
-		/*let result = crntChkArr.map((item, idx) => item[idx] ) ;
-		console.log( 'result :', result ) ;*/
-
-		/*let result = [] ;
-		result = crntChkArr.map((item, idx) => {
-
-		}) ;
-		console.log( result ) ;*/
-
-	}
-
-
-	/*handleChkChange = ( n1, n2 ) => {
-		let crntChkArr = this.state.chkArr ;
-		crntChkArr[n1][n2] = !crntChkArr[n1][n2] * 1;
-		this.setState({
-			chkArr : crntChkArr
-		}) ;
-	}*/
 
 	sltCompleteHandler(){
-		let chkDays = this.state.chkArr.sort((a,b) => a-b).map( item => this.state.meetDays[item].no ) ;
 
+		console.log( '투표 완료 했습니다.' ) ;
+
+		// 최종 선택한 번호에 일치한 날짜를 가져와서 새로운 배열로 만든다.
+		let checkedDays = this.state.chkArr.sort((a,b) => a-b).map( item => this.state.meetDays[item].no ) ;
+
+		// 기존 참여자 데이터 객체에다가 선택한 날짜의 속성과 값을 추가한다.
 		let resultMeetPerson = this.state.meetPerson.map((item) => {
 			if( item.name === this.state.personData.name ) {
-				item.chkDays = chkDays ;
+				item.checkedDays = checkedDays ;
 			}
 			return item ;
-		})
+		}) ;
+
+		// 로컬스토리지에 변경된 참여자 데이터를 업데이트한다.
 		localStorage.setItem( 'meetPerson' , JSON.stringify( resultMeetPerson ) ) ;
 
 	}
-
 	chkboxHandler = ( crntIdx ) => {
+
+		console.log( crntIdx ) ;
+
 		let chkArr = this.state.chkArr
 		,   idxArr = chkArr.indexOf( crntIdx ) ;
 
@@ -116,6 +120,8 @@ class VotingContainer extends Component {
 			chkArr : chkArr
 		}) ;
 
+		console.log( '현재 체크한 날짜 : ', this.state.chkArr ) ;
+
 	}
 
 	render () {
@@ -127,6 +133,7 @@ class VotingContainer extends Component {
 			name : this.state.personData.name ,
 			email : this.state.personData.email ,
 			days : this.state.meetDays ,
+			checkedDays : this.state.checkedDays ,
 			handler : this.chkboxHandler
 		} ;
 
@@ -198,14 +205,25 @@ class MakeCheckField extends Component {
 		super( props ) ;
 		this.state = {
 			chk : false ,
-			chkArr : [ true, false, false ]
+			checkedArr : []
 		}
 		this.handleChkChange = this.handleChkChange.bind(this);
+
+		console.log( '전달 받은 선택한 날짜 : ', this.props.checkedDays ) ;
+
+		if( this.props.checkedDays ) {
+			console.log( '------> 선택한 날짜가 있다!' ) ;
+			this.state.checkedArr = this.props.days.map( item => this.props.checkedDays.indexOf( item.no ) > -1 ? true : false ) ;
+		}else{
+			this.state.checkedArr = [ false , false , false ]
+		}
+
+		console.log( '전달 받은 선택한 날짜 boolean값으로 :', this.state.checkedArr ) ;
 	}
 
 	handleChkChange( event ) {
 
-		console.log( 'click in' ) ;
+		console.log( '체크!' ) ;
 
 		let tg = event.target
 		,	 tgParent = tg.closest('tr')
@@ -226,7 +244,7 @@ class MakeCheckField extends Component {
 	makeChkbox( item, idx ){
 		return (
 			<td key={idx}>
-				<input type="checkbox" onChange={this.handleChkChange} />
+				<input type="checkbox" defaultChecked={this.state.checkedArr[idx]} onChange={this.handleChkChange} />
 			</td>
 		)
 	}
