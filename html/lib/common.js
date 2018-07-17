@@ -29,7 +29,7 @@ if(!Array.prototype.counter) {
 				get : function() {
 						let arr = this
 						;
-						
+
 						// let counter = function(arr, cnt, recent, callback, start=0){
 						let counter = function(cnt, recent, callback, start=0){
 								let dir = cnt/Math.abs(cnt);
@@ -45,7 +45,7 @@ if(!Array.prototype.counter) {
 												loop = callback(result[i], i);
 												if(loop === false) break;
 										}
-								}    
+								}
 								return result;
 						}
 
@@ -62,7 +62,7 @@ if(!document.documentElement.findIndex){
 				 let element = this
 				 ,  parentNode = this.parentNode
 				 ,  siblings = parentNode.children
-				 ,  findIndex 
+				 ,  findIndex
 				 ,  indexOf = Array.prototype.indexOf
 				 ;
 
@@ -91,7 +91,7 @@ if(!NodeList.prototype.findIndex){
 			}
 	 }
 
-	 Object.defineProperty(NodeList.prototype, 'findIndex', findIndexNodeList); 
+	 Object.defineProperty(NodeList.prototype, 'findIndex', findIndexNodeList);
 }
 
 export let AjaxLoad = (() => {
@@ -106,27 +106,27 @@ export let AjaxLoad = (() => {
 	 }
 
 	 return function(){
-			stack.push({ url : arguments[0] , callback : arguments[1] }) ; 
+			stack.push({ url : arguments[0] , callback : arguments[1] }) ;
 			function call () {
-				 if ( ajaxLoaded ) return ; 
-				 if ( stack.length == 0 ) return ; 
-				 ajaxLoaded = true ; 
-				 let obj = stack[0] ; 
+				 if ( ajaxLoaded ) return ;
+				 if ( stack.length == 0 ) return ;
+				 ajaxLoaded = true ;
+				 let obj = stack[0] ;
 
 				 /* html 아작스 로딩 */
 				 xhttp.onreadystatechange = function () {
 						if ( xhttp.readyState ===4 && xhttp.status === 200 ) {
-							 let cont = xhttp.responseText ; 
-							 obj.callback( cont ) ; 
-							 stack.shift() ; 
-							 ajaxLoaded = false ; 
-							 call() ; 
+							 let cont = xhttp.responseText ;
+							 obj.callback( cont ) ;
+							 stack.shift() ;
+							 ajaxLoaded = false ;
+							 call() ;
 						}
-				 } ; 
+				 } ;
 
-				 xhttp.dateType = 'script' ; 
-				 xhttp.open( 'GET' , obj.url , true ) ; 
-				 xhttp.send() ; 
+				 xhttp.dateType = 'script' ;
+				 xhttp.open( 'GET' , obj.url , true ) ;
+				 xhttp.send() ;
 			}
 			call() ;
 	 }
@@ -145,31 +145,31 @@ export let AjaxLoadPost = (() => {
 		}
 
 		return function(){
-				 stack.push({ url : arguments[0] , data : arguments[1] , callback : arguments[2] }) ; 
+				 stack.push({ url : arguments[0] , data : arguments[1] , callback : arguments[2] }) ;
 
 				 function call () {
-						 // console.log( 'ajaxLoaded : '  , ajaxLoaded , 'stack.length : ' , stack.length ) ; 
-						 if ( ajaxLoaded ) return ; 
-						 if ( stack.length == 0 ) return ; 
-						 ajaxLoaded = true ; 
+						 // console.log( 'ajaxLoaded : '  , ajaxLoaded , 'stack.length : ' , stack.length ) ;
+						 if ( ajaxLoaded ) return ;
+						 if ( stack.length == 0 ) return ;
+						 ajaxLoaded = true ;
 						 let obj = stack[0] ;
 
 						 xhttp.onreadystatechange = function () {
 									if ( xhttp.readyState ===4 && xhttp.status === 200 ) {
-											let cont = xhttp.responseText ; 
-											obj.callback( cont ) ; 
-											stack.shift() ; 
-											ajaxLoaded = false ; 
-											call() ; 
+											let cont = xhttp.responseText ;
+											obj.callback( cont ) ;
+											stack.shift() ;
+											ajaxLoaded = false ;
+											call() ;
 									}
-						 } ; 
+						 } ;
 
-						 // console.log( obj.data ) ; 
+						 // console.log( obj.data ) ;
 
-						 // xhttp.dateType = 'script' ; 
-						 xhttp.open( 'POST' , obj.url , true ) ; 
+						 // xhttp.dateType = 'script' ;
+						 xhttp.open( 'POST' , obj.url , true ) ;
 						 xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-						 xhttp.send( obj.data ) ; 
+						 xhttp.send( obj.data ) ;
 				 }
 				 call() ;
 		}
@@ -187,31 +187,31 @@ export let AjaxLoadGet = (() => {
 		}
 
 		return function(){
-				 stack.push({ url : arguments[0] , data : arguments[1] , callback : arguments[2] }) ; 
+				 stack.push({ url : arguments[0] , data : arguments[1] , callback : arguments[2] }) ;
 
 				 function call () {
-						 // console.log( 'ajaxLoaded : '  , ajaxLoaded , 'stack.length : ' , stack.length ) ; 
-						 if ( ajaxLoaded ) return ; 
-						 if ( stack.length == 0 ) return ; 
-						 ajaxLoaded = true ; 
+						 // console.log( 'ajaxLoaded : '  , ajaxLoaded , 'stack.length : ' , stack.length ) ;
+						 if ( ajaxLoaded ) return ;
+						 if ( stack.length == 0 ) return ;
+						 ajaxLoaded = true ;
 						 let obj = stack[0] ;
 
 						 xhttp.onreadystatechange = function () {
 									if ( xhttp.readyState ===4 && xhttp.status === 200 ) {
-											let cont = xhttp.responseText ; 
-											obj.callback( cont ) ; 
-											stack.shift() ; 
-											ajaxLoaded = false ; 
-											call() ; 
+											let cont = xhttp.responseText ;
+											obj.callback( cont ) ;
+											stack.shift() ;
+											ajaxLoaded = false ;
+											call() ;
 									}
-						 } ; 
+						 } ;
 
-						 // console.log( obj.data ) ; 
+						 // console.log( obj.data ) ;
 
-						 // xhttp.dateType = 'script' ; 
-						 xhttp.open( 'GET' , obj.url , true ) ; 
+						 // xhttp.dateType = 'script' ;
+						 xhttp.open( 'GET' , obj.url , true ) ;
 						 xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-						 xhttp.send( obj.data ) ; 
+						 xhttp.send( obj.data ) ;
 				 }
 				 call() ;
 		}
@@ -224,35 +224,35 @@ export function RandomRange(min, max){
 export class ChkText {
 	constructor () {
 		this.p = (() => {
-			let elem_p = document.createElement( 'p' ) ; 
-			elem_p.classList.add( 'alarmText' ) ; 
-			return elem_p ; 
-		})() ; 
+			let elem_p = document.createElement( 'p' ) ;
+			elem_p.classList.add( 'alarmText' ) ;
+			return elem_p ;
+		})() ;
 
 		this.opt = {
-			duration : 2000 
-		} ; 
+			duration : 2000
+		} ;
 
 	}
 
 	add ( text , elem_tag ) {
-		let mine = this ; 
-		this.p.textContent = text ; 
-		elem_tag.appendChild( this.p ) ; 
+		let mine = this ;
+		this.p.textContent = text ;
+		elem_tag.appendChild( this.p ) ;
 
 		setTimeout( () => {
 			if ( document.body.contains( mine.p ) ) {
-				mine.p.parentNode.removeChild( mine.p ) ; 
+				mine.p.parentNode.removeChild( mine.p ) ;
 			}
-		} , mine.opt.duration ) ; 
+		} , mine.opt.duration ) ;
 	}
 
 	clear () {
-		let mine = this ; 
+		let mine = this ;
 		if ( document.body.contains( mine.p ) ) {
-			mine.p.parentNode.removeChild( mine.p ) ; 
+			mine.p.parentNode.removeChild( mine.p ) ;
 		}
-		// console.log( 'clear' ) ; 
+		// console.log( 'clear' ) ;
 	}
 }
 
@@ -280,7 +280,7 @@ export class PromiseSetter {
 
 		this.resolve;
 		this.reject;
-		
+
 		this.promise = new Promise ( (resolve, reject)=>{
 			// console.log("Promise Setter : " , this);
 			This.resolve = resolve;
@@ -288,5 +288,3 @@ export class PromiseSetter {
 		} );
 	}
 }
-
-console.log( 'lib common' ) ; 

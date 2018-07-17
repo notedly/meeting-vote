@@ -1,8 +1,6 @@
-import React , { Component } from 'react' ; 
-
-console.log( 'common in' ) ; 
+import React , { Component } from 'react' ;
 
 let common = {
-	yaho : 'yaho' , 
-	yeah : 'yeah' , 
-} ; 
+	yaho : 'yaho' ,
+	yeah : 'yeah' ,
+} ;

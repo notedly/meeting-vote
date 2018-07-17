@@ -2,8 +2,10 @@ import React , { Component } from 'react' ;
 import ReactDOM , { render } from 'react-dom' ;
 import common from './include/common' ;
 import PromiseSetter from '../lib/common' ;
-
-// https://www.zerocho.com/category/HTML/post/5b3ae84fb3dabd001b53b9ab
+import VotePerson from './voteContainer/votePerson' ;
+import VoteResult from './voteContainer/VoteResult' ;
+import VoteDateField from './include/voteDateField' ;
+import VoteCheckField from './include/voteCheckField' ;
 
 class VotingContainer extends Component {
 	constructor( props ){
@@ -22,7 +24,8 @@ class VotingContainer extends Component {
 			meetPerson : null ,
 			personData : null ,
 			chkArr : [] ,
-			checkedDays : []
+			checkedDays : [] ,
+			crntPage : null
 		}
 
 		if( infoSummary ) {
@@ -40,51 +43,55 @@ class VotingContainer extends Component {
 			this.state.meetPerson = infoPerson ;
 		}
 
+		/*
+		* 개별 주소 : http://localhost:7005/voting?page=vote&person=박지성
+		* 결과 주소 : http://localhost:7005/voting?page=vote_result
+		*/
+
 		/* 파라메터 값 가져오기 */
-		let url = new URL( location.href ) ;
-		let person = url.searchParams.get('person') ;
-		let personData = this.state.meetPerson.filter(item => item.name == person )[0] ;
-		this.state.personData = personData ? personData : [] ;
+		let url = new URL( location.href )
+		,	 person = url.searchParams.get('person')
+		, 	 crntPage = url.searchParams.get('page')
+		, 	 personData = null
+		,   daysNum = this.state.meetDays.map((item) => item.no) ;
 
-		this.state.checkedDays = personData ? personData.checkedDays : [] ;
+		console.log( '##### 현재 페이지 - ', crntPage , ' #####') ;
 
+		this.state.crntPage = crntPage ;
 
-		console.log( '참여자 정보 : ', this.state.meetPerson ) ;
-		console.log( '투표 날짜 정보 : ', this.state.meetDays ) ;
+		/* 개별 페이지 일 경우 */
+		if( crntPage === 'vote' ) {
+			// personData = this.state.meetPerson.filter(item => item.name == person )[0] ;
+			personData = this.state.meetPerson.filter(item => item.name == person ) ;
+			this.state.personData = personData ? personData : [] ;
+			this.state.checkedDays = personData ? personData[0].checkedDays : [] ;
 
-		// console.log( '현재 페이지 : ', this.state.personData ) ;
-		console.log( '선택한 날짜 : ', this.state.checkedDays ) ;
+			/* 선택한 날짜 인덱스를 저장해야한다.
+			스토리지에 저장되어있는 선택된 날짜를 가져와서 indexOf로 어디에 위치했는지 찾아서 배열로 저장한다. */
+			if( this.state.checkedDays ){
+				this.state.checkedDays.forEach((item) => {
+					let idx = daysNum.indexOf( item ) ;
+					if( idx >= 0 ) this.state.chkArr.push( idx ) ;
+				}) ;
+			}
 
-
-		/* 선택한 날짜 인덱스를 저장해야한다.
-		스토리지에 저장되어있는 선택된 날짜를 가져와서 indexOf로 어디에 위치했는지 찾아서 배열로 저장한다. */
-
-		let daysNum = this.state.meetDays.map((item) => item.no) ;
-
-		console.log( '투표 날짜 NO : ', daysNum ) ;
-
-
-		if( this.state.checkedDays ){
-			this.state.checkedDays.forEach((item) => {
-				let idx = daysNum.indexOf( item ) ;
-				if( idx >= 0 ) this.state.chkArr.push( idx ) ;
-			}) ;
+		}else {
+			/* 결과 페이지 일 경우 */
+			this.state.personData = this.state.meetPerson ;
 		}
 
-		console.log( '선택한 날짜 인덱스 :' ,this.state.chkArr ) ;
+		console.log( 'personData :' , this.state.personData ) ;
 
+		// console.log( 'person :' , person ) ;
+		// console.log( 'meetPerson :' , this.state.meetPerson ) ;
+		// console.log( 'page :' , page ) ;
+		// console.log( '참여자 정보 : ', this.state.meetPerson ) ;
+		// console.log( '투표 날짜 정보 : ', this.state.meetDays ) ;
+		// console.log( '현재 페이지 : ', this.state.personData ) ;
+		// console.log( '선택한 날짜 : ', this.state.checkedDays ) ;
 	}
 
-	componentDidMount(){
-		// console.log( 'this.state.chkArr : ', this.state.chkArr ) ;
-	}
-
-	componentDidUpdate(){
-		// console.log( 'componentDidUpdate :', this.state.chkArr ) ;
-		// this.watchChkArr() ;
-	}
-
-	sltCompleteHandler(){
+	sltCompleteHandler = () => {
 
 		console.log( '투표 완료 했습니다.' ) ;
 
@@ -93,7 +100,7 @@ class VotingContainer extends Component {
 
 		// 기존 참여자 데이터 객체에다가 선택한 날짜의 속성과 값을 추가한다.
 		let resultMeetPerson = this.state.meetPerson.map((item) => {
-			if( item.name === this.state.personData.name ) {
+			if( item.name === this.state.personData[0].name ) {
 				item.checkedDays = checkedDays ;
 			}
 			return item ;
@@ -102,10 +109,14 @@ class VotingContainer extends Component {
 		// 로컬스토리지에 변경된 참여자 데이터를 업데이트한다.
 		localStorage.setItem( 'meetPerson' , JSON.stringify( resultMeetPerson ) ) ;
 
+		alert('투표 완료 했습니다') ;
+
 	}
+
 	chkboxHandler = ( crntIdx ) => {
 
-		console.log( crntIdx ) ;
+		// console.log( crntIdx ) ;
+		console.log( '체크 했어!' ) ;
 
 		let chkArr = this.state.chkArr
 		,   idxArr = chkArr.indexOf( crntIdx ) ;
@@ -126,140 +137,40 @@ class VotingContainer extends Component {
 
 	render () {
 
-		let dateFieldProps = {
-			days : this.state.meetDays
-		} ,
-		personFieldProps = {
-			name : this.state.personData.name ,
-			email : this.state.personData.email ,
-			days : this.state.meetDays ,
-			checkedDays : this.state.checkedDays ,
-			handler : this.chkboxHandler
-		} ;
+		if( this.state.crntPage == 'vote' ){
 
-		/*makeChkField = ( person , idx ) => {
-			let props = {
-				key : `chk${idx}` ,
-				options : {
-					no : `row${idx}` ,
-					email : person.name ,
-					days : this.state.meetDays
-				} ,
-				handler : this.handleChkChange
-			}
-			return <MakeCheckField {...props} />
-		}*/
+			let votePersonProps = {
+				personData : this.state.personData ,
+				title : this.state.title ,
+				memo : this.state.memo ,
+				days : this.state.meetDays ,
+				checkedDays : this.state.checkedDays ,
+				sltCompleteHandler : this.sltCompleteHandler ,
+				handler : this.chkboxHandler
+			} ;
 
-		return (
-			<div className="wrap">
-				<h1>{this.state.title + '날짜 투표!'}</h1>
-				<p>{this.state.memo}</p>
-				<table className="tb_voting">
-					<MakeDateField {...dateFieldProps} />
-					<tbody>
-						<MakeCheckField {...personFieldProps} />
-					</tbody>
-					{/*<tbody>
-						{this.state.meetPerson.map( makeChkField )}
-					</tbody>*/}
-				</table>
-				<div className="btn_area">
-					<a href="#;" className="btn" onClick={this.sltCompleteHandler.bind(this)}>선택 완료</a>
+			return (
+				<VotePerson {...votePersonProps} />
+			)
+
+		} else {
+
+			let voteResultProps = {
+				title : this.state.title ,
+				memo : this.state.memo ,
+				days : this.state.meetDays ,
+				personData : this.state.personData
+			} ;
+
+			return (
+				<div>
+					<VoteResult {...voteResultProps} />
 				</div>
-				{/*<div className="result">
-					<p>최종 선택된 날짜는 <span>------</span>입니다.</p>
-				</div>*/}
-			</div>
-		)
-	}
-}
+			)
 
-class MakeDateField extends Component {
-	constructor( props ) {
-		super( props ) ;
-		// console.log( this.props )
-	}
-	makeDaysMarkup( item, idx ) {
-		return <th scope="col" key={idx}>
-			{
-				item.month + 1 + '월 '
-				+ item.date + '일'
-				+ '(' + item.day + ')'
-			}
-		</th>
-	}
-	render(){
-		return(
-			<thead>
-				<tr>
-					<th scope="col">날짜!</th>
-					{this.props.days.map( this.makeDaysMarkup, this )}
-				</tr>
-			</thead>
-		)
-	}
-}
-
-class MakeCheckField extends Component {
-	constructor( props ) {
-		super( props ) ;
-		this.state = {
-			chk : false ,
-			checkedArr : []
 		}
-		this.handleChkChange = this.handleChkChange.bind(this);
-
-		console.log( '전달 받은 선택한 날짜 : ', this.props.checkedDays ) ;
-
-		if( this.props.checkedDays ) {
-			console.log( '------> 선택한 날짜가 있다!' ) ;
-			this.state.checkedArr = this.props.days.map( item => this.props.checkedDays.indexOf( item.no ) > -1 ? true : false ) ;
-		}else{
-			this.state.checkedArr = [ false , false , false ]
-		}
-
-		console.log( '전달 받은 선택한 날짜 boolean값으로 :', this.state.checkedArr ) ;
-	}
-
-	handleChkChange( event ) {
-
-		console.log( '체크!' ) ;
-
-		let tg = event.target
-		,	 tgParent = tg.closest('tr')
-		,	 tgChkRow = tgParent.getAttribute('data-chk-row')
-		, 	 allChk = tgParent.querySelectorAll('input')
-		,	 crntIdx = [].indexOf.call( allChk, tg ) ;
-
-		this.props.handler( crntIdx ) ;
-
-		/* 넘겨야할 정보는
-		현재 클릭한 chk의 인덱스(자기 그룹안에서)
-		현재 클릭한 부모의 인덱스
-		이중배열 접근을 위해서임. */
-
-		// this.props.handler( Number( tgChkRow.slice(3) ) , crntIdx ) ;
-	}
-
-	makeChkbox( item, idx ){
-		return (
-			<td key={idx}>
-				<input type="checkbox" defaultChecked={this.state.checkedArr[idx]} onChange={this.handleChkChange} />
-			</td>
-		)
-	}
-
-	render(){
-		return(
-			<tr>
-				<td>{this.props.name}</td>
-				{this.props.days.map( this.makeChkbox, this )}
-			</tr>
-		)
 	}
 }
-
-
 
 window.addEventListener( 'load' , () => {
 	let meetContainer = document.createElement( 'div' ) ;
@@ -267,3 +178,21 @@ window.addEventListener( 'load' , () => {
 	render( <VotingContainer /> , meetContainer ) ;
 	document.body.appendChild( meetContainer ) ;
 }) ;
+
+/*
+<div className="wrap">
+	<h1>{this.state.title + '날짜 투표!'}</h1>
+	<p>{this.state.memo}</p>
+	<table className="tb_voting">
+		<VoteDateField {...dateFieldProps} />
+		<tbody>
+			<VoteCheckField {...personFieldProps} />
+		</tbody>
+	</table>
+	<div className="btn_area">
+		<a href="#;" className="btn" onClick={this.sltCompleteHandler.bind(this)}>선택 완료</a>
+	</div>
+	<div className="result">
+		<p>최종 선택된 날짜는 <span>------</span>입니다.</p>
+	</div>
+</div>*/
