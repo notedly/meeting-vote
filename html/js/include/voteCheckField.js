@@ -5,9 +5,11 @@ class VoteCheckField extends Component {
 	constructor( props ) {
 		super( props ) ;
 
-		console.log( '[VoteCheckField.js] 가져온 참여자 데이터 : ', this.props.personData ) ;
-		console.log( '[VoteCheckField.js] 가져온 참여자 데이터 수 : ', this.props.personData.length ) ;
-		console.log( '[VoteCheckField.js] 가져온 선택값 : ', this.props.checkedDays ) ;
+		// console.log( '[VoteCheckField.js] 가져온 참여자 데이터 : ', this.props.personData ) ;
+		// console.log( '[VoteCheckField.js] 가져온 참여자 데이터 수 : ', this.props.personData.length ) ;
+		// console.log( '[VoteCheckField.js] 가져온 선택값 : ', this.props.checkedDays ) ;
+
+		console.log( '---------------------------------->>>>>>>>>>>> this.props.days :', this.props.days ) ;
 
 		this.state = {
 			chk : false ,
@@ -15,17 +17,16 @@ class VoteCheckField extends Component {
 		}
 		this.handleChkChange = this.handleChkChange.bind(this);
 
-
 		/* 결과 페이지인 경우 */
 		if( this.props.personData.length > 1 ){
 
 			let chkArr = this.props.personData.map( item => item.checkedDays ) ;
 
+			console.log( '[VoteCheckField.js] 선택 날짜만 분류 : ', chkArr ) ;
+
 			this.state.checkedArr = chkArr.map( item => {
 				return this.props.days.map( elem => item.indexOf( elem.no ) > -1 ? true : false ) ;
 			}) ;
-
-			console.log( '[VoteCheckField.js] 선택 날짜만 분류 : ', chkArr ) ;
 
 
 		}else{
@@ -41,10 +42,12 @@ class VoteCheckField extends Component {
 			}
 		}
 
-		console.log( '[VoteCheckField.js] 전달 받은 선택한 날짜 boolean값으로 :', this.state.checkedArr ) ;
+		// console.log( '[VoteCheckField.js] 전달 받은 선택한 날짜 boolean값으로 :', this.state.checkedArr ) ;
 	}
 
 	handleChkChange( event ) {
+
+		console.log( 'this : ', this , this.props.handler ) ;
 
 		let tg = event.target
 		,	 tgParent = tg.closest('tr')
@@ -63,7 +66,6 @@ class VoteCheckField extends Component {
 	}
 
 	makeChkbox( item, idx, arr ){
-		console.log( 'item : ', item , 'idx : ', idx , 'arr : ', arr );
 		return (
 			<td key={idx}>
 				<input type="checkbox" defaultChecked={
@@ -74,10 +76,26 @@ class VoteCheckField extends Component {
 	}
 
 	makePerson( item, idx ) {
+		let num = idx
+		,	 that = this
+		, 	 url = "http://localhost:7005/voting?page=vote&person=" + item.name ;
 		return(
 			<tr key={idx}>
-				<td>{item.name}</td>
-				{this.props.days.map( this.makeChkbox , this )}
+				<td><a href={url}>{item.name}</a></td>
+
+				{/*this.props.days.map( this.makeChkbox , this )*/}
+
+				{this.props.days.map(function( item , idx , arr ){
+					return (
+						<td key={idx}>
+							<input type="checkbox" defaultChecked={
+								that.props.personData.length > 1 ? that.state.checkedArr[num][idx] : that.state.checkedArr[idx]
+							} onChange={that.handleChkChange} disabled={ that.props.personData.length > 1 ? 'disabled' : false }
+							/>
+						</td>
+					)
+				})}
+
 			</tr>
 		)
 	}

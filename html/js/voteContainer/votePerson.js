@@ -21,7 +21,7 @@ class VotePerson extends Component {
 		} ;
 
 		return(
-			<div className="wrap">
+			<div className="vote">
 				<h1>{this.props.title + '날짜 투표!'}</h1>
 				<p>{this.props.memo}</p>
 				<table className="tb_voting">
@@ -29,7 +29,7 @@ class VotePerson extends Component {
 					<VoteCheckField {...personFieldProps} />
 				</table>
 				<div className="btn_area">
-					<a href="#;" className="btn" onClick={this.props.sltCompleteHandler.bind(this)}>선택 완료</a>
+					<a href="http://localhost:7005/voting?page=result" className="btn bot" onClick={this.props.sltCompleteHandler.bind(this)}>선택 완료</a>
 				</div>
 			</div>
 		)
@@ -37,15 +37,3 @@ class VotePerson extends Component {
 }
 
 export default VotePerson ;
-
-/*
-<table className="tb_voting">
-	<VoteDateField {...dateFieldProps} />
-	<tbody>
-		<VoteCheckField {...personFieldProps} />
-	</tbody>
-</table>
-<div className="btn_area">
-	<a href="#;" className="btn" onClick={this.sltCompleteHandler.bind(this)}>선택 완료</a>
-</div>
-*/

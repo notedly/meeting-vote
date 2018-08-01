@@ -122,17 +122,28 @@ class RegisterContainer extends Component {
 			registerComplete : this.registerComplete
 		}
 
-		switch( this.state.pageStep ){
-			case '1' :
-				return ( <RegisterSummary {...regSummaryProps} /> ) ;
-			break ;
-			case '2' :
-				return ( <RegisterDetail {...regDetailProps} /> ) ;
-			break ;
-			case '3' :
-				return ( <RegisterPreview {...regPreviewProps} /> ) ;
-			break ;
-		}
+		// switch( this.state.pageStep ){
+		// 	case '1' :
+		// 		return ( <RegisterSummary {...regSummaryProps} /> ) ;
+		// 	break ;
+		// 	case '2' :
+		// 		return ( <RegisterDetail {...regDetailProps} /> ) ;
+		// 	break ;
+		// 	case '3' :
+		// 		return (  ) ;
+		// 	break ;
+		// }
+
+		// 위 코드를 줄여서 아래처럼 표현할 수 있다.
+
+		return (
+			<div>
+				{ this.state.pageStep == '1' && <RegisterSummary {...regSummaryProps} /> }
+				{ this.state.pageStep == '2' && <RegisterDetail {...regDetailProps} /> }
+				{ this.state.pageStep == '3' && <RegisterPreview {...regPreviewProps} /> }
+			</div>
+		)
+
 
 
 	}

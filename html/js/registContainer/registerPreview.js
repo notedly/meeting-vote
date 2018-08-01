@@ -22,14 +22,14 @@ class RegisterPreview extends Component {
 				type : 'A' ,	// A or BUTTON
 				href : '#;' ,
 				label : '이전' ,
-				class : 'btn' ,
+				class : 'btn bot' ,
 				handler : () => this.register.pageMove('prev')
 			} ,
 			{
 				type : 'A' ,	// A or BUTTON
 				href : '#;' ,
 				label : '완료' ,
-				class : 'btn' ,
+				class : 'btn bot' ,
 				handler : () => this.props.registerComplete()
 			}
 		] ;
@@ -55,7 +55,8 @@ class RegisterPreview extends Component {
 	render () {
 
 		let topTitleProps = {
-			text : 'STEP 03. 미리보기'
+			text : '작성된 내용을 최종적으로 확인하세요.' ,
+			subText : '3단계 확인'
 		}
 		, previewInfo = this.props
 		, makeBtns = ( btn, idx ) => {
@@ -76,13 +77,13 @@ class RegisterPreview extends Component {
 			<div className="wrap_register preview">
 				<TopTitle {...topTitleProps} />
 
-				<div className="top">
-					<h2>{previewInfo.title}</h2>
-				</div>
-
 				<dl className="contents">
+					<dt>모임명</dt>
+					<dd>{previewInfo.title}</dd>
 					<dt>주최자</dt>
 					<dd>{previewInfo.name}</dd>
+					<dt>모임 장소</dt>
+					<dd>{previewInfo.loc}</dd>
 					<dt>모임 투표 날짜</dt>
 					<dd>
 						<ul className="lst_preview">
@@ -95,8 +96,6 @@ class RegisterPreview extends Component {
 							{previewInfo.meetPerson.map( this.emailListMakeHandler , this )}
 						</ul>
 					</dd>
-					<dt>모임 장소</dt>
-					<dd>{previewInfo.loc}</dd>
 					<dt>추가 내용</dt>
 					<dd>{previewInfo.memo}</dd>
 				</dl>

@@ -25,13 +25,22 @@ class RegisterDetail extends Component {
 			meetNameOriginValue : '' ,
 			meetEmailModifyValue : '' ,
 			meetNameModifyValue : '' ,
-			modifyOpen : false
+			modifyOpen : false ,
+			today : new Date()
 		}
 
-		console.log( '참여자 : ', this.state.meetPerson )
+		// console.log( '참여자 : ', this.state.meetPerson )
+		// console.log( '참여자 : ', this.state.meetPerson )
+		console.log( '모임 날짜 : ', this.props.meetDaysOrigin ) ;
+		console.log( '현재 선택된 날짜 :', this.state.selectedDays ) ;
 
-		console.log( this.props.meetDaysOrigin ) ;
-		console.log( '현재 선택된 날짜 :', this.state.selectedDays )
+		// let sltDayOrigin = localStorage.getItem( 'meetDaysOrigin' );
+		// console.log( '서버에서 가져온 날짜 :', sltDayOrigin ) ;
+		// if( sltDayOrigin ){
+		// 	this.state.selectedDays = sltDayOrigin ;
+		// }
+
+
 
 		/**
 		[ props ]
@@ -53,14 +62,14 @@ class RegisterDetail extends Component {
 				type : 'A' ,	// A or BUTTON
 				href : '#;' ,
 				label : '이전' ,
-				class : 'btn' ,
+				class : 'btn bot' ,
 				handler : () => this.register.pageMove('prev')
 			} ,
 			{
 				type : 'A' ,	// A or BUTTON
 				href : '#;' ,
 				label : '다음' ,
-				class : 'btn' ,
+				class : 'btn bot' ,
 				handler : () => this.register.pageMove('next')
 			}
 		] ;
@@ -84,6 +93,9 @@ class RegisterDetail extends Component {
 	- 달력에서 날짜를 클릭했을 때 발생한다. */
 
 	handleDayClick(day, { selected }) {
+
+		console.log( '=====> ', day , {selected} ) ;
+
 		const { selectedDays } = this.state;
 		// 이미 선택되어 있다면 삭제
 		if (selected) {
@@ -94,8 +106,12 @@ class RegisterDetail extends Component {
 		} else {
 			selectedDays.push(day);
 		}
-		console.log( selectedDays ) ;
 		this.setState({ selectedDays });
+
+		console.log( '현재 선택된 날짜 : ________________ ', this.state.selectedDays ) ;
+
+		this.confirmClickHandler() ;
+
 	}
 
 	/* 달력 기능 3. 날짜 선택 완료
@@ -107,14 +123,8 @@ class RegisterDetail extends Component {
 		let day = [ '일', '월', '화', '수', '목', '금', '토' ]
 		,	 select = null ;
 
-		// console.log( this.state.selectedDaysConvert) ;
-		// console.log( this.state.selectedDays) ;
-
-		console.log( this.state.selectedDays ) ;
-
 		// 변환
 		let selectedDaysConvert = this.state.selectedDays.map(item => select = { no : item.getTime(), month : item.getMonth() , day : day[ item.getDay() ] , date : item.getDate() }) ;
-
 
 		// 날짜순 정렬
 		selectedDaysConvert = selectedDaysConvert.sort((a, b) => a.no - b.no) ;
@@ -131,7 +141,6 @@ class RegisterDetail extends Component {
 	}
 
 	/* 달력 기능 4. 선택한 날짜 노출 */
-
 	selectListMakeHandler( days, idx ){
 		return(
 			<li key={idx}>{days.month + 1 + '월 ' + days.date + '일 ' + days.day + '요일'}</li>
@@ -182,7 +191,8 @@ class RegisterDetail extends Component {
 
 			arrMeetPerson.push({
 				name : meetNameValue ,
-				email : meetEmailValue
+				email : meetEmailValue ,
+				checkedDays : []
 			})
 
 			this.setState({
@@ -201,17 +211,18 @@ class RegisterDetail extends Component {
 	meetParticipantListMakeHandler( person, idx ){
 		return(
 			<li key={idx} data-value={person.email}>
-				<span>{person.name}</span>
-				<span>{person.email}</span>
-				<button type="button" className="btn btn_sm" onClick={this.removeParticipant.bind(this)}>삭제</button>
-				<button type="button" className="btn btn_sm" onClick={this.modifyParticipant.bind(this)}>수정</button>
+				<span className="name">{person.name}</span>
+				<span className="email">{person.email}</span>
+				<div className="btn_area">
+					<button type="button" className="btn btn_sm comp" onClick={this.removeParticipant.bind(this)}>삭제</button>
+					<button type="button" className="btn btn_sm cancel" onClick={this.modifyParticipant.bind(this)}>수정</button>
+				</div>
 			</li>
 		)
 	}
 
 	/* 참여자 기능 3. 삭제 버튼 클릭 */
 	removeParticipant( event ){
-
 
 		let removeEmail = event.target.closest('li').getAttribute('data-value')
 		,	 arrMeetPerson = this.state.meetPerson ;
@@ -282,7 +293,6 @@ class RegisterDetail extends Component {
 
 			console.log( meetPerson ) ;
 
-
 			let newMeetEmailArray = meetPerson.map(( item ) => {
 				return item.email == this.state.meetEmailOriginValue ? { name : this.state.meetNameModifyValue , email : this.state.meetEmailModifyValue } : item
 			}) ;
@@ -323,13 +333,13 @@ class RegisterDetail extends Component {
 		return arrMeetPerson.some( item => item == chkEmail) ;
 	}
 
-
 	render(){
 
 		let topTitleProps = {
-			text : 'STEP 02. 언제?누구와?'
-		}
-		, makeBtns = ( btn, idx ) => {
+			text : '세부 정보를 입력하세요.' ,
+			subText : '2단계 작성'
+		} ,
+		makeBtns = ( btn, idx ) => {
 			let props = {
 				key : `btn${idx}` ,
 				options : {
@@ -344,75 +354,95 @@ class RegisterDetail extends Component {
 		}
 
 		return(
-			<div className="wrap_register">
+			<div className="wrap_register step2">
 
 				<TopTitle {...topTitleProps} />
 
 				<div className="form">
 
 					<div className="ct">
-						<ul>
-							<li>
-								<button type="button" onClick={this.openCalendar.bind(this)}>날짜선택</button>
-								<div className={this.state.calendarOpen ? 'cal_area open' : 'cal_area'}>
-									<DayPicker
-										selectedDays={this.state.selectedDays}
-										onDayClick={this.handleDayClick}
-									/>
-									<button type="button" className="btn btn_day_select" onClick={this.confirmClickHandler}>날짜 선택완료</button>
-								</div>
-								<ul className="lst_slt_days">{this.state.selectedDaysConvert.map( this.selectListMakeHandler , this )}</ul>
-							</li>
-							<li>
-								<label>참여자 : </label>
-								<ul className="lst_person">
-									{this.state.meetPerson.map( this.meetParticipantListMakeHandler , this )}
-								</ul>
-								<div>
 
-									<div className={this.state.modifyOpen ? "ip_add_modify open" : "ip_add_modify" }>
+						<div className="field">
+							<label htmlFor="">날짜 선택</label>
+							<div className="calendar">
+								<DayPicker
+									disabledDays={{ before: this.state.today }}
+									selectedDays={this.state.selectedDays}
+									onDayClick={this.handleDayClick}
+								/>
+								{/*<div className="btn_area">
+									<button type="button" className="btn btn_day_select" onClick={this.confirmClickHandler}>날짜 선택완료</button>
+								</div>*/}
+							</div>
+							<div className="select">
+								<ul className="lst_slt_days">{this.state.selectedDaysConvert.map( this.selectListMakeHandler , this )}</ul>
+							</div>
+						</div>
+
+						<div className="field">
+							<label htmlFor="">참여자 추가</label>
+							<div>
+								<div className={this.state.modifyOpen ? "ip_add modify open" : "ip_add modify" }>
+									<div className="row">
 										<input
 											type="text"
 											ref={ref => this.addNameModify = ref}
 											onChange={this.nameInputModifyChange.bind(this)}
 											value={this.state.meetNameModifyValue}
 										/>
+									</div>
+									<div className="row">
 										<input
 											type="email"
 											ref={ref => this.addEmailModify = ref}
 											onChange={this.emailInputModifyChange.bind(this)}
 											value={this.state.meetEmailModifyValue}
 										/>
+									</div>
+									<div className="row">
 										<span className="btn_area">
-											<button type="button" className="btn btn_sm" onClick={this.modifyCompleteParticipant.bind(this)}>완료</button>
-											<button type="button" className="btn btn_sm" onClick={this.modifyCancelParticipant.bind(this)}>취소</button>
+											<button type="button" className="btn comp" onClick={this.modifyCompleteParticipant.bind(this)}>완료</button>
+											<button type="button" className="btn cancel" onClick={this.modifyCancelParticipant.bind(this)}>취소</button>
 										</span>
 									</div>
+								</div>
 
-									<div className={this.state.modifyOpen ? "ip_add close" : "ip_add" }>
+								<div className={this.state.modifyOpen ? "ip_add close" : "ip_add" }>
+									<div className="row">
 										<input
 											type="text"
 											ref={ref => this.addName = ref}
-											placeholder="이름을 입력하세요"
+											placeholder="이름"
 											onChange={this.nameInputChange.bind(this)}
 										/>
+									</div>
+									<div className="row">
 										<input
 											type="email"
 											ref={ref => this.addEmail = ref}
-											placeholder="이메일을 입력하세요"
+											placeholder="이메일"
 											onChange={this.emailInputChange.bind(this)}
 										/>
+									</div>
+									<div className="row">
 										<span className="btn_area">
-											<button type="button" className="btn btn_sm" onClick={this.addMeetPerson.bind(this)}>추가</button>
+											<button type="button" className="btn" onClick={this.addMeetPerson.bind(this)}>추가</button>
 										</span>
-
 									</div>
 
 								</div>
-							</li>
-						</ul>
-					</div>
 
+							</div>
+						</div>
+
+						<div className="field">
+							<label htmlFor="">참여자 리스트</label>
+							<ul className="lst_person">
+								{this.state.meetPerson.map( this.meetParticipantListMakeHandler , this )}
+							</ul>
+						</div>
+
+					</div>
 				</div>
 				<div className="btn_area">{ this.btns.map( makeBtns ) }</div>
 			</div>

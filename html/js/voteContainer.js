@@ -159,7 +159,8 @@ class VotingContainer extends Component {
 				title : this.state.title ,
 				memo : this.state.memo ,
 				days : this.state.meetDays ,
-				personData : this.state.personData
+				personData : this.state.personData ,
+				handler : this.chkboxHandler
 			} ;
 
 			return (

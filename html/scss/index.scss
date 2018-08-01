@@ -2,24 +2,153 @@
 @import './ui/layout';
 @import './ui/common';
 
+@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic');
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+// @import url('https://fonts.googleapis.com/css?family=Nanum+Gothic');
+// @import url('https://fonts.googleapis.com/earlyaccess/kopubbatang.css');
+body, button, input { font-family:'맑은 고딕', sans-serif; font-size:14px; line-height:1.4; color:#333; letter-spacing:-.5px;}
+html{
+	height:100%;
+	background:linear-gradient(rgba(196, 102, 0, 0.6), rgba(155, 89, 182, 0.6));
+}
+body{
+	width:100%;
+	height:100%;
+	background: transparent;
+}
+.wrap_register{
+	position: relative;
+	width:500px;
+	padding:20px 30px;
+	margin:0 auto;
+	background-color:#fff;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	border-radius: 3px;
+	box-sizing: border-box;
+	.step2{
+
+	}
+}
 .wrapBox{
 	padding:50px;
 	.title{
-		margin-bottom:5px;
+		margin-bottom:15px;
+		text-align: center;
 		h1{
-			font-size:15px;
-			font-weight: bold;
+			margin-bottom: 5px;
+			letter-spacing: -1px;
+			font-size: 15px;
+			text-transform: uppercase;
+			color: #2C3E50;
+		}
+		span{
+			font-weight: normal;
+			font-size: 13px;
+			color: #666;
+			margin-bottom: 20px;
 		}
 	}
 	.form{
-		ul{
-			> li{
-				margin-bottom:3px;
-			}
-		}
+		margin-bottom:10px;
 		label{
+			display: block;
 			line-height: 22px;
 			vertical-align: top;
+		}
+		.ct{
+			.field{
+				overflow:hidden;
+				margin-bottom:10px;
+				label{
+					position:relative;
+					display: inline-block;
+					margin-bottom:2px;
+					line-height: 1;
+					letter-spacing: -1px;
+					font-size:13px;
+					font-weight: 600;
+					z-index: 1;
+					// &:before{
+					// 	content:"";
+					// 	display: block;
+					// 	position:absolute;
+					// 	left:0;
+					// 	bottom:0;
+					// 	width:100%;
+					// 	height:8px;
+					// 	background-color: #faee48;
+					// 	z-index: 0;
+					// 	opacity: 0.6;
+					// 	z-index: -1;
+					// }
+				}
+			}
+		}
+		.txt_important{
+			margin-bottom: 5px;
+			text-align: right;
+			font-size:11px;
+			letter-spacing: -1px;
+			color:#666;
+			strong{
+				display: inline-block;
+				vertical-align: middle;
+				margin-right: 2px;
+				font-weight: bold;
+				color:red;
+			}
+		}
+	}
+	.select{
+		.lst_slt_days{
+			li{
+				// display: inline-block;
+				// margin:0 2px 2px 0;
+				// padding:3px 5px;
+				// font-size:12px;
+				// border-radius:3px;
+				// background-color:#d2d2d2;
+				// font-weight: bold;
+
+				display: inline-block;
+				-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+				height: 22px;
+				margin-right: 4px;
+				margin-bottom: 4px;
+				padding: 0 6px;
+				border: 1px solid #8d9ebd;
+				background-color: #fff;
+				font-size: 11px;
+				font-family: "돋움",dotum,"Apple SD Gothic Neo",sans-serif;
+				line-height: 22px;
+				color: #8d9ebd;
+				letter-spacing: -.3px;
+				-ms-box-sizing: border-box;
+				-o-box-sizing: border-box;
+			}
+		}
+	}
+	.lst_person{
+		li{
+			position:relative;
+			margin:0;
+			height:36px;
+			line-height: 36px;
+			border-bottom:1px solid #c5cdd3;
+			span{
+				display: inline-block;
+				&.name{
+					margin-right: 5px;
+				}
+			}
+			.btn_area{
+				display: inline-block;
+				position:absolute;
+				right:0;
+				top:0;
+			}
 		}
 	}
 	.btn_area{
@@ -29,12 +158,42 @@
 		}
 	}
 	input[type=text], input[type=email], textarea{
-		display: inline-block;
-		padding:0 2px;
-		line-height:22px;
-		border:1px solid #bbb;
+		/* display: inline-block;
+		width:100%;
+		padding:0 5px;
+		line-height:24px;
+		border:1px solid #c5cdd3;
+		box-sizing:border-box;
+		font-size:15px;
+		letter-spacing: -1px;
+
+		-moz-box-shadow: 1px 1px 2px rgba( 0, 0, 0, 0.12 ) inset;
+		-webkit-box-shadow: 1px 1px 2px rgba( 0, 0, 0, 0.12 ) inset;
+		box-shadow: 1px 1px 2px rgba( 0, 0, 0, 0.12 ) inset;
+		background: #fcfcfc;
+		background: rgba( 255, 255, 255, 0.85 );
+		border: 1px solid #c9c9c9;
+		border: 1px solid rgba( 0, 0, 0, 0.2 );
+		-webkit-transition-duration: .3s;
+		-moz-transition-duration: .3s; */
+
+		padding: 15px;
+		border: 1px solid #ccc;
+		border-radius: 3px;
+		width: 100%;
+		box-sizing: border-box;
+		color: #2C3E50;
+		font-size: 13px;
 		font-family: 'Nanum Gothic', sans-serif;
+
 	}
+	textarea{
+		padding:15px;
+	}
+	// input[type=text], input[type=email]{
+	// 	height:40px;
+	// 	line-height: 40px;
+	// }
 	.cal_area{
 		display: none;
 		&.open{
@@ -48,30 +207,60 @@
 	padding:100px;
 	h1{
 		margin-bottom: 20px;
+		font-size:23px;
+		font-weight: bold;
 	}
 }
 
 .btn{
 	display: inline-block;
-	padding:10px 20px;
-	border-radius:5px;
-	background-color:#333;
-	color:#fff;
-	font-size:14px;
+	padding:10px 15px;
+	background-color:#fff;
+	color:#333;
+	border:1px solid #ccc;
+	line-height: 1;
+	font-size:15px;
+	letter-spacing: -1px;
 	&.btn_sm{
 		padding:5px 10px;
 		font-size:12px;
 		line-height: 1;
 	}
+	&.bot{
+		width:100px;
+		background: #27AE60;
+		font-weight: bold;
+		color: #fff;
+		border: 0 none;
+		border-radius: 1px;
+		cursor: pointer;
+		padding: 10px 5px;
+		margin: 10px 5px;
+		letter-spacing: 0;
+	}
 }
 
 .ip_add{
+	.row{
+		margin-bottom:5px;
+		.btn_area{
+			display: -webkit-flex;
+			display: flex;
+			.btn{
+				-webkit-flex: 1;
+          	flex: 1;
+          	padding:15px;
+          	font-size:14px;
+          	margin:0;
+			}
+		}
+	}
 	&.close{
 		display: none;
 	}
 }
 
-.ip_add_modify{
+.modify{
 	display: none;
 	&.open{
 		display: block;
@@ -82,19 +271,23 @@
 	.top{
 		text-align: center;
 		h2{
-			font-size:20px;
+			margin-bottom: 10px;
+			font-size:23px;
 			font-weight: bold;
 		}
 	}
 	.contents{
 		dt{
-			margin-bottom: 5px;
+			margin-bottom: 10px;
 			font-weight: bold;
 			border-bottom:1px dotted #333;
 			line-height: 1.6;
+			font-size:13px;
+			letter-spacing:-1px;
 		}
 		dd{
-			margin-bottom:15px;
+			margin-bottom:20px;
+			font-size:13px;
 		}
 	}
 }
@@ -118,10 +311,117 @@
 	}
 }
 
+.important{
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 2px;
+	font-weight: bold;
+	color:red;
+}
+
+/* 달력 */
+.calendar{width:223px; float:right;	}
+.DayPicker-wrapper{padding-bottom:0 !important;}
+.DayPicker-Month{margin:0 !important;}
+.txt_info{display: inline-block; margin-left:5px; font-size:12px; letter-spacing: -1px;}
+
+/* 공통 레이어 박스 */
+.layer{
+	position:absolute;
+	left:50%;
+	top:50%;
+	padding:30px 50px;
+	background-color:#fff;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	border-radius: 3px;
+	box-sizing: border-box;
+	transform:translate(-50%, -50%) ;
+}
+
+/*  완료 페이지 */
+.complete{
+	h1{
+		text-align: center;
+		margin-bottom:20px;
+		font-size:20px;
+	}
+	.btn{
+		width:150px;
+	}
+}
+
+/*  투표 페이지  */
+.vote{
+	position: absolute;
+	left:50%;
+	top:50%;
+	width:600px;
+	padding:30px 50px;
+	background-color:#fff;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	border-radius: 3px;
+	box-sizing: border-box;
+	transform:translate(-50%, -50%) ;
+	> h1{
+		text-align: center;
+		margin-bottom: 5px;
+		font-size:20px;
+		font-weight: bold;
+		letter-spacing: -1px;
+	}
+	> p{
+		margin-bottom: 20px;
+	}
+	.tb_voting{
+		margin-bottom: 20px;
+	}
+}
+
 .tb_voting{
+	width:100%;
+	letter-spacing: -1px;
 	border-collapse: collapse;
 	border-spacing: 0;
 	th, td{
-		border:1px solid #333;
+		border:1px solid #949494;
+	}
+	thead{
+		th{
+			padding:15px 0;
+			text-align:center;
+			vertical-align: middle;
+			line-height: 1.3;
+			span{
+				display: block;
+				color:#666;
+				&.date{
+					font-size:18px;
+					font-weight: bold;
+					color:#333;
+				}
+			}
+		}
+	}
+	tbody{
+		td{
+			padding:10px;
+			text-align:center;
+			font-weight: bold;
+			font-size:16px;
+			a{
+				color:#333;
+			}
+			input[type=checkbox]{
+				width:15px;
+				height:15px;
+			}
+		}
+	}
+}
+
+.txt_result{
+	text-align: center;
+	span{
+		display: block;
 	}
 }

@@ -8,8 +8,8 @@ class IndexContainer extends Component {
 	render () {
 		return (
 			<div className="intro">
-				<h1>Hello, meeting.</h1>
-				<a href="/register?step=1" className="btn">Meet</a>
+				<h1>모임 만들기</h1>
+				<a href="/register?step=1" className="btn">START</a>
 			</div>
 		) ;
 	}

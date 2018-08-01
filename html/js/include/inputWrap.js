@@ -1,8 +1,6 @@
 import React , { Component } from 'react' ;
 import ReactDOM , { render } from 'react-dom' ;
 
-console.log( 'in InputWrap' ) ;
-
 class InputWrap extends Component {
 	constructor( props ) {
 		super( props ) ;
@@ -45,9 +43,8 @@ class InputWrap extends Component {
 
 		return (
 			<div className="field">
-				<label htmlFor={opts.id}>{opts.label}</label>
+				{/*<label htmlFor={opts.id}>{ this.props.options.important ? <strong className="important">*</strong> : '' }{opts.label}</label>*/}
 				{ field }
-
 			</div>
 		) ;
 	}

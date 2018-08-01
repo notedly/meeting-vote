@@ -7,18 +7,16 @@ class VoteDateField extends Component {
 	}
 	makeDaysMarkup( item, idx ) {
 		return <th scope="col" key={idx}>
-			{
-				item.month + 1 + '월 '
-				+ item.date + '일'
-				+ '(' + item.day + ')'
-			}
+			<span className="month">{item.month + 1 + '월 '}</span>
+			<span className="date">{item.date + '일'}</span>
+			<span className="day">{'('+item.day+')'}</span>
 		</th>
 	}
 	render(){
 		return(
 			<thead>
 				<tr>
-					<th scope="col">날짜!</th>
+					<th scope="col"></th>
 					{this.props.days.map( this.makeDaysMarkup, this )}
 				</tr>
 			</thead>
