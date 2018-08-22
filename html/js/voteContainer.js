@@ -6,6 +6,7 @@ import VotePerson from './voteContainer/votePerson' ;
 import VoteResult from './voteContainer/VoteResult' ;
 import VoteDateField from './include/voteDateField' ;
 import VoteCheckField from './include/voteCheckField' ;
+import QuickMenu from './include/QuickMenu' ;
 
 class VotingContainer extends Component {
 	constructor( props ){
@@ -150,7 +151,10 @@ class VotingContainer extends Component {
 			} ;
 
 			return (
-				<VotePerson {...votePersonProps} />
+				<div>
+					<VotePerson {...votePersonProps} />
+					<QuickMenu />
+				</div>
 			)
 
 		} else {

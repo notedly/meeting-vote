@@ -9,7 +9,7 @@ class IndexContainer extends Component {
 		return (
 			<div className="intro">
 				<h1>모임 만들기</h1>
-				<a href="/register?step=1" className="btn">START</a>
+				<a href="/register?step=1" className="btn bot">START</a>
 			</div>
 		) ;
 	}
